@@ -58,8 +58,9 @@ void loop() {
       Serial.println(inserimento);
       ClearScreen();
       lcd.setCursor(0, 0);
-      lcd.print("Inizia...");
+      lcd.print("Iniziando...");
       delay(1500);
+      break;
       //Start();
     }
     if(inserimento == 'B'){
@@ -68,99 +69,40 @@ void loop() {
       lcd.print("Scegli Difficolta");
       lcd.setCursor(0, 1);
       lcd.print("1C");
-      lcd.setCursor(4, 1);
+      lcd.setCursor(3, 1);
       lcd.print("2D");
       lcd.setCursor(6, 1);
       lcd.print("3E");
 
-        switch(inserimento){
-          case 'C':
-            ClearScreen();
-            a = diff1[0];
-            lcd.print("1C");
-            delay(1500);
-            break;
-          case 'D':
-            ClearScreen();
-            a = diff2[0];
-            lcd.print("2D");
-            delay(1500);
-            break;
-          case 'E':
-            ClearScreen();
-            a = diff3[0];
-            lcd.print("3E");
-            delay(1500);
-            break;
-          default: 
-            ClearScreen();
-            lcd.setCursor(0, 1);
-            lcd.print("Error");
-            delay(1500);
-            break;
+      switch(inserimento){
+        case 'C':
+          ClearScreen();
+          a = diff1[0];
+          lcd.print("1C");
+          delay(1500);
+          break;
+        case 'D':
+          ClearScreen();
+          a = diff2[0];
+          lcd.print("2D");
+          delay(1500);
+          break;
+        case 'E':
+          ClearScreen();
+          a = diff3[0];
+          lcd.print("3E");
+          delay(1500);
+          break;
+        default: 
+          ClearScreen();
+          lcd.setCursor(0, 1);
+          lcd.print("Error");
+          delay(1500);
+          break;
       }
     }
   }
   //BeginMenu();
-}
-
-void BeginMenu(){
-  lcd.setCursor(0, 0);
-/*   for(int i = 1; i <= 3; i++){
-    lcd.print("Begins in " + i + "...");
-    delay(1000);
-  } */
-
-/*   lcd.print("Iniziando...");
-  delay(1000);
-  ClearScreen();
-
-  delay(1000); */
-  lcd.print("Inizia");
-  lcd.setCursor(0, 1);
-  lcd.print("Difficolta");
-  Serial.print(inserimento);
-  if(inserimento == 'A'){
-    ClearScreen();
-    lcd.setCursor(0, 0);
-    lcd.print("Inizia...");
-    delay(1500);
-    Start();
-  }
-  if(inserimento == 'B'){
-    ClearScreen();
-    lcd.setCursor(0, 0);
-    lcd.print("Scegli Difficolta");
-    lcd.setCursor(0, 1);
-    lcd.print("1C");
-    lcd.setCursor(4, 1);
-    lcd.print("2D");
-    lcd.setCursor(6, 1);
-    lcd.print("3E");
-
-    switch(inserimento){
-      case 'C':
-        ClearScreen();
-        a = diff1[0];
-        lcd.print("1C");
-        break;
-      case 'D':
-        ClearScreen();
-        a = diff2[0];
-        lcd.print("2D");
-        break;
-      case 'E':
-        ClearScreen();
-        a = diff3[0];
-        lcd.print("3E");
-        break;
-      default: 
-        ClearScreen();
-        lcd.setCursor(0, 1);
-        lcd.print("Error");
-        break;
-    }
-  }
 }
 
 void ClearScreen(){
