@@ -48,15 +48,17 @@ void loop() {
   inserimento = customKeypad.getKey();
   /* lcd.setCursor(0,0);
   lcd.print("Ciao"); */
-  ClearScreen();
+  
+  lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Inizia");
   lcd.setCursor(0, 1);
   lcd.print("Difficolta");
+
   if(inserimento){
     if(inserimento == 'A'){
       Serial.println(inserimento);
-      ClearScreen();
+      lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("Iniziando...");
       delay(1500);
@@ -64,7 +66,7 @@ void loop() {
       //Start();
     }
     if(inserimento == 'B'){
-      ClearScreen();
+      lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("Scegli Difficolta");
       lcd.setCursor(0, 1);
@@ -76,25 +78,25 @@ void loop() {
 
       switch(inserimento){
         case 'C':
-          ClearScreen();
+          lcd.clear();
           a = diff1[0];
           lcd.print("1C");
           delay(1500);
           break;
         case 'D':
-          ClearScreen();
+          lcd.clear();
           a = diff2[0];
           lcd.print("2D");
           delay(1500);
           break;
         case 'E':
-          ClearScreen();
+          lcd.clear();
           a = diff3[0];
           lcd.print("3E");
           delay(1500);
           break;
         default: 
-          ClearScreen();
+          lcd.clear();
           lcd.setCursor(0, 1);
           lcd.print("Error");
           delay(1500);
@@ -105,15 +107,8 @@ void loop() {
   //BeginMenu();
 }
 
-void ClearScreen(){
-  lcd.setCursor(0, 0);
-  lcd.clear();
-  lcd.setCursor(0, 1);
-  lcd.clear();
-}
-
 void Start(){
-  ClearScreen();
+  lcd.clear();
 
   lcd.setCursor(0, 0);
   lcd.print("HangMan - ");
@@ -130,15 +125,13 @@ void Start(){
       i++;
       if(i == a.length()){
         if(parola == a){
-          ClearScreen();
-          lcd.setCursor(0, 0);
+          lcd.clear();
           lcd.print("Hai Vinto");
           lcd.setCursor(0, 1);
           lcd.print(parola);
           delay(1500);
         } else{
-          ClearScreen();
-          lcd.setCursor(0, 0);
+          lcd.clear();
           lcd.print("Hai Perso");
           lcd.setCursor(0, 1);
           lcd.print(parola);
