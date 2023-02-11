@@ -48,7 +48,7 @@ void loop() {
   inserimento = customKeypad.getKey();
   /* lcd.setCursor(0,0);
   lcd.print("Ciao"); */
-
+  ClearScreen();
   lcd.setCursor(0, 0);
   lcd.print("Inizia");
   lcd.setCursor(0, 1);
@@ -78,21 +78,25 @@ void loop() {
             ClearScreen();
             a = diff1[0];
             lcd.print("1C");
+            delay(1500);
             break;
           case 'D':
             ClearScreen();
             a = diff2[0];
             lcd.print("2D");
+            delay(1500);
             break;
           case 'E':
             ClearScreen();
             a = diff3[0];
             lcd.print("3E");
+            delay(1500);
             break;
           default: 
             ClearScreen();
             lcd.setCursor(0, 1);
             lcd.print("Error");
+            delay(1500);
             break;
       }
     }
@@ -178,7 +182,7 @@ void Start(){
   do{
     if(inserimento){
       lcd.setCursor(i, 1);
-      Serial.print(inserimento);
+      Serial.println("Inserito: " + inserimento);
       lcd.print(inserimento);
       parola[i] = inserimento;
       i++;
@@ -189,14 +193,16 @@ void Start(){
           lcd.print("Hai Vinto");
           lcd.setCursor(0, 1);
           lcd.print(parola);
+          delay(1500);
         } else{
           ClearScreen();
           lcd.setCursor(0, 0);
           lcd.print("Hai Perso");
           lcd.setCursor(0, 1);
           lcd.print(parola);
+          delay(1500);
         }
       }
     }
-  }while(parola == a.length());
+  }while(i <= a.length());
 }
