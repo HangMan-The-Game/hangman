@@ -41,14 +41,15 @@ void setup() {
   lcd.backlight(); */
   lcd.begin(16, 2);
   Serial.begin(9600);
+  //randomSeed(analogRead(0));
 }
 
 void loop() {
-  //rand = random(3); //(max = 3)
+  //rand = random(3);
   inserimento = customKeypad.getKey();
   /* lcd.setCursor(0,0);
   lcd.print("Ciao"); */
-  
+
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Inizia");
