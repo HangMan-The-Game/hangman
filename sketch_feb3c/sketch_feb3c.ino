@@ -96,7 +96,11 @@ void menuInit(){
 }
 
 void menuDiff(){
-   while (z<1){
+  
+  while(true){
+
+  z = 0;
+  while(z<1){
     char diff = customKeypad.getKey();
     delay (100);
 
@@ -105,6 +109,8 @@ void menuDiff(){
       lcd.setCursor(0, 1);
       lcd.print("1C    P");
       a = diff1[0];
+      delay(1000);
+    z++;
     }
 
     if(diff == 'D'){
@@ -112,6 +118,8 @@ void menuDiff(){
       lcd.setCursor(0, 1);
       lcd.print("2C    P");
       a = diff2[0];
+      delay(1000);
+      z++;
     }
 
     if(diff == 'E'){
@@ -119,12 +127,17 @@ void menuDiff(){
       lcd.setCursor(0, 1);
       lcd.print("3E    P");
       a = diff3[0];
+      delay(1000);
+      z++;
+    }{
+      break;
     }
-
-    if(diff == 'P'){
-      loop();
-    }
+   
   }
+  }
+  
+
+
 }
 
 void Start(){
