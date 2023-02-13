@@ -13,15 +13,15 @@ char tasti[ROWS][COLS] = {
   {'O', 'P', 'Q', 'R'}
 };
 
-char inserimento;
+char inserimento, difficolta;
 
-byte rowPins[ROWS] = {7, 6, 5, 4};
-byte colPins[COLS] = {3, 2, 1, 0};
+byte rowPins[ROWS] = {9, 8, 7, 6};
+byte colPins[COLS] = {5, 4, 3, 2};
 
 Keypad customKeypad = Keypad(makeKeymap(tasti), rowPins, colPins, ROWS, COLS);
 
-LiquidCrystal lcd(8, 9, 10, 11, 12, 13);
-//LiquidCrystal_I2C lcd(0x27, 16, 2);
+//LiquidCrystal lcd(8, 9, 10, 11, 12, 13);
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 int tentativi = 0;
 //long rand;
@@ -34,27 +34,39 @@ String a = diff1[0];
 //String risposta(a.size(), '_');
 String parola = "";
 char indovina;
-int i = 0;
+int i = 0, c = 0, z;
+bool flag = false;
 
 void setup() {
-/*   lcd.init();
-  lcd.backlight(); */
-  lcd.begin(16, 2);
+  lcd.init();
+  lcd.backlight();
+  //lcd.begin(16, 2);
   Serial.begin(9600);
+  c = 0;
   //randomSeed(analogRead(0));
 }
 
 void loop() {
   //rand = random(3);
   inserimento = customKeypad.getKey();
-  /* lcd.setCursor(0,0);
-  lcd.print("Ciao"); */
+  delay(100);
+  z = 0;
+/*   lcd.setCursor(0, 0);
+  lcd.print("MICH"); */
+  //Serial.println("TEST");
 
-  lcd.clear();
+/*   if(inserimento){
+    Serial.println(inserimento);
+  } */ 
   lcd.setCursor(0, 0);
   lcd.print("Inizia");
   lcd.setCursor(0, 1);
   lcd.print("Difficolta");
+  c++;
+  if(c <= 1){
+    lcd.setCursor(0, 1);
+    lcd.clear();
+  }
 
   if(inserimento){
     if(inserimento == 'A'){
@@ -63,49 +75,42 @@ void loop() {
       lcd.setCursor(0, 0);
       lcd.print("Iniziando...");
       delay(1500);
-      break;
       //Start();
+      while(true){}
     }
     if(inserimento == 'B'){
       lcd.clear();
       lcd.setCursor(0, 0);
-      lcd.print("Scegli Difficolta");
+      lcd.print("Difficolta");
       lcd.setCursor(0, 1);
       lcd.print("1C");
       lcd.setCursor(3, 1);
       lcd.print("2D");
       lcd.setCursor(6, 1);
       lcd.print("3E");
-
-      switch(inserimento){
-        case 'C':
-          lcd.clear();
-          a = diff1[0];
-          lcd.print("1C");
-          delay(1500);
-          break;
-        case 'D':
-          lcd.clear();
-          a = diff2[0];
-          lcd.print("2D");
-          delay(1500);
-          break;
-        case 'E':
-          lcd.clear();
-          a = diff3[0];
-          lcd.print("3E");
-          delay(1500);
-          break;
-        default: 
-          lcd.clear();
-          lcd.setCursor(0, 1);
-          lcd.print("Error");
-          delay(1500);
-          break;
+      menuDiff();
       }
+      while(true){}
+    }
+}
+
+void menuDiff(){
+   while (z<1){
+    char diff = customKeypad.getKey();
+    delay (100);
+
+    if(diff == 'C'){
+      lcd.clear();
+      lcd.setCursor(0, 1);
+      lcd.print("1C");
+    }
+
+    if(diff == 'D'){
+      lcd.clear();
+      lcd.setCursor(0, 1);
+      lcd.print("2C");
     }
   }
-  //BeginMenu();
 }
 
 void Start(){
@@ -117,7 +122,8 @@ void Start(){
     lcd.setCursor(x, 0);
     lcd.print("*");
   }
-  do{
+  
+/*   do{
     if(inserimento){
       lcd.setCursor(i, 1);
       Serial.println("Inserito: " + inserimento);
@@ -140,5 +146,5 @@ void Start(){
         }
       }
     }
-  }while(i <= a.length());
+  }while(i <= a.length()); */
 }
