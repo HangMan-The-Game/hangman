@@ -55,18 +55,7 @@ void loop() {
   lcd.print("MICH"); */
   //Serial.println("TEST");
 
-/*   if(inserimento){
-    Serial.println(inserimento);
-  } */ 
-  lcd.setCursor(0, 0);
-  lcd.print("Inizia");
-  lcd.setCursor(0, 1);
-  lcd.print("Difficolta");
-  c++;
-  if(c <= 1){
-    lcd.setCursor(0, 1);
-    lcd.clear();
-  }
+  menuInit();
 
   if(inserimento){
     if(inserimento == 'A'){
@@ -94,6 +83,18 @@ void loop() {
     }
 }
 
+void menuInit(){
+  lcd.setCursor(0, 0);
+  lcd.print("Inizia");
+  lcd.setCursor(0, 1);
+  lcd.print("Difficolta");
+  c++;
+  if(c <= 1){
+    lcd.setCursor(0, 1);
+    lcd.clear();
+  }
+}
+
 void menuDiff(){
    while (z<1){
     char diff = customKeypad.getKey();
@@ -102,13 +103,26 @@ void menuDiff(){
     if(diff == 'C'){
       lcd.clear();
       lcd.setCursor(0, 1);
-      lcd.print("1C");
+      lcd.print("1C    P");
+      a = diff1[0];
     }
 
     if(diff == 'D'){
       lcd.clear();
       lcd.setCursor(0, 1);
-      lcd.print("2C");
+      lcd.print("2C    P");
+      a = diff2[0];
+    }
+
+    if(diff == 'E'){
+      lcd.clear();
+      lcd.setCursor(0, 1);
+      lcd.print("3E    P");
+      a = diff3[0];
+    }
+
+    if(diff == 'P'){
+      loop();
     }
   }
 }
