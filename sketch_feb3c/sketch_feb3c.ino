@@ -50,7 +50,6 @@ void loop() {
   //rand = random(3);
   inserimento = customKeypad.getKey();
   delay(100);
-  z = 0;
 /*   lcd.setCursor(0, 0);
   lcd.print("MICH"); */
   //Serial.println("TEST");
@@ -96,27 +95,26 @@ void menuInit(){
 }
 
 void menuDiff(){
-  
-  while(true){
 
   z = 0;
-  while(z<1){
+
+  do{
     char diff = customKeypad.getKey();
     delay (100);
 
     if(diff == 'C'){
       lcd.clear();
       lcd.setCursor(0, 1);
-      lcd.print("1C    P");
+      lcd.print("1C");
       a = diff1[0];
       delay(1000);
-    z++;
+      z++;
     }
 
     if(diff == 'D'){
       lcd.clear();
       lcd.setCursor(0, 1);
-      lcd.print("2C    P");
+      lcd.print("2C");
       a = diff2[0];
       delay(1000);
       z++;
@@ -125,16 +123,13 @@ void menuDiff(){
     if(diff == 'E'){
       lcd.clear();
       lcd.setCursor(0, 1);
-      lcd.print("3E    P");
+      lcd.print("3E");
       a = diff3[0];
       delay(1000);
       z++;
-    }{
-      break;
     }
    
-  }
-  }
+  }while(z<1);
   
 
 
