@@ -35,7 +35,7 @@ String a = diff1[0];
 String parola = "";
 char indovina;
 int i = 0, c = 0, z;
-bool flag = false;
+bool ciccio = false;
 
 void setup() {
   lcd.init();
@@ -44,6 +44,7 @@ void setup() {
   Serial.begin(9600);
   c = 0;
   //randomSeed(analogRead(0));
+  customKeypad.addEventListener(change);
 }
 
 void loop() {
@@ -51,8 +52,8 @@ void loop() {
   inserimento = customKeypad.getKey();
   delay(100);
 /*   lcd.setCursor(0, 0);
-  lcd.print("MICH"); */
-  //Serial.println("TEST");
+  lcd.print("MICH");
+  Serial.print(customKeypad.); */
 
   menuInit();
 
@@ -63,8 +64,8 @@ void loop() {
       lcd.setCursor(0, 0);
       lcd.print("Iniziando...");
       delay(1500);
-      //Start();
-      while(true){}
+      Start();
+      while(ciccio){}
     }
     if(inserimento == 'B'){
       lcd.clear();
@@ -78,8 +79,12 @@ void loop() {
       lcd.print("3E");
       menuDiff();
       }
-      while(true){}
+      while(ciccio){}
     }
+}
+
+void change(){
+  ciccio = !ciccio;
 }
 
 void menuInit(){
@@ -130,8 +135,6 @@ void menuDiff(){
     }
    
   }while(z<1);
-  
-
 
 }
 
@@ -145,7 +148,7 @@ void Start(){
     lcd.print("*");
   }
   
-/*   do{
+  do{
     if(inserimento){
       lcd.setCursor(i, 1);
       Serial.println("Inserito: " + inserimento);
@@ -168,5 +171,11 @@ void Start(){
         }
       }
     }
-  }while(i <= a.length()); */
+      
+      while(true){
+        if(customKeypad.keyStateChanged()){
+          break;
+        }
+      }
+  }while(i <= a.length());
 }
