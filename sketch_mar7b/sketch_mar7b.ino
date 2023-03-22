@@ -22,18 +22,22 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 char inserimento;
 char pippo = ' ';
 String parola = "";
-String a = "PANE";
-int i = 0, tentativi = 0, z = 0;
+String b [] = {"PANE", "CANE", "GIO", "CIA", "ALE"}; // parole da generare
+String a = ""; // parola da indovinare
+int i = 0, tentativi = 0, z = 0, generated = 0;
 
 void setup(){
+  randomSeed(analogRead(0));
   lcd.init();
   lcd.backlight();
+  generated = generaNum();
 }
 
 void loop(){
   inserimento = customKeypad.getKey();
+  a = b[generated];
   lcd.setCursor(0, 0);
-    lcd.print("HangMan - " + a);
+  lcd.print("HangMan - " + a);
   
 //  for(int x = 10; x < a.length()+10; x++){
 //    lcd.setCursor(x, 0);
@@ -45,7 +49,7 @@ void loop(){
     Serial.print(inserimento);
     lcd.print(inserimento);
     parola += inserimento;
-
+    
     i++;
     if(i == a.length()){
       lcd.clear();
@@ -67,7 +71,7 @@ void loop(){
        
        
       //BISOGNA FARE I CONTROLLI PER OGNI LETTERA
-      //BISOGNA FARE UN CONTROLLO PER CLEARARE LA PARTE INIZIARE R(74) DI CODICE 
+      //BISOGNA FARE UN CONTROLLO PER CLEARARE LA PARTE INIZIARE Riga(40) DI CODICE 
 
 
 
@@ -86,4 +90,12 @@ void loop(){
     }
 
   }
+}
+
+int generaNum(){
+  int num;
+  
+  num = random (0, 4);
+
+  return num;
 }
