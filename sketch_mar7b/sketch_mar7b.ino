@@ -27,10 +27,10 @@ String a = ""; // parola da indovinare
 int i = 0, tentativi = 0, z = 0, generated = 0;
 
 void setup(){
-  randomSeed(analogRead(0));
+  randomSeed(analogRead(0)); // trovare un'altra soluzione con il millis()
   lcd.init();
   lcd.backlight();
-  generated = generaNum();
+  generated = generaNum(); //variabile a cui viene assegnato il valore in uscita della funzione che genera il numero
 }
 
 void loop(){
@@ -50,6 +50,15 @@ void loop(){
     lcd.print(inserimento);
     parola += inserimento;
     
+/*     for(int y = 0; y < a.length(); y++){
+      if(parola[i] == a[y]){
+        lcd.clear();
+        lcd.setCursor(2, 1);
+        lcd.print("giusto! " + parola[i]);
+        delay(1500);
+      }
+    } */
+
     i++;
     if(i == a.length()){
       lcd.clear();
@@ -69,12 +78,11 @@ void loop(){
         lcd.clear();
       }
        
-       
-      //BISOGNA FARE I CONTROLLI PER OGNI LETTERA
-      //BISOGNA FARE UN CONTROLLO PER CLEARARE LA PARTE INIZIARE Riga(40) DI CODICE 
-
-
-
+      /* BISOGNA FARE I MENU (MENU INIZIALE, DI GIOCO E MENU DELA SCELTA DELLA DIFFICOLTA')
+      BISOGNA FARE I CONTROLLI PER OGNI LETTERA.
+      BISOGNA FARE UN CONTROLLO PER CLEARARE LA PARTE INIZIARE Riga(lcd.print("HangMan - " + a);) DI CODICE .
+      BISOGNA FARE LA STRINGA[VETTORE] CHE SERVE PER BANNARE LE PAROLE GIA USCITE DALLA STRINGA[VETTORE] CON TUTTE LE PAROLE. */
+    
 /*       if(parola == a){
         lcd.clear();
         lcd.print("Hai Vinto");
@@ -92,10 +100,8 @@ void loop(){
   }
 }
 
-int generaNum(){
+int generaNum(){      //funzione che genera un numero a caso seguendo un range 
   int num;
-  
   num = random (0, 4);
-
   return num;
 }
