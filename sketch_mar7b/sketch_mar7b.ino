@@ -22,11 +22,13 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 char inserimento;
 char pippo = ' ';
 String parola = "";
-String b [] = {"PANE", "CANE", "GIO", "CIA", "ALE"}; // parole da generare
+String b [] = {"GIO", "CIA", "ALE"}; // parole da generare
 String a = ""; // parola da indovinare
+String nascosta = "***"; // temporaneo
 int i = 0, tentativi = 0, z = 0, generated = 0;
 
 void setup(){
+  Serial.begin(9600);
   randomSeed(analogRead(0)); // trovare un'altra soluzione con il millis()
   lcd.init();
   lcd.backlight();
@@ -37,16 +39,15 @@ void loop(){
   inserimento = customKeypad.getKey();
   a = b[generated];
   lcd.setCursor(0, 0);
-  lcd.print("HangMan - " + a);
-  
-//  for(int x = 10; x < a.length()+10; x++){
-//    lcd.setCursor(x, 0);
-//    lcd.print("*");
-//  }
+  lcd.print("HangMan - ");
+
+  for(int x = 10; x < a.length()+10; x++){
+    lcd.setCursor(x, 0);
+    lcd.print("*");
+  }
   
   if(inserimento){
     lcd.setCursor(i, 1);
-    Serial.print(inserimento);
     lcd.print(inserimento);
     parola += inserimento;
     
@@ -58,25 +59,41 @@ void loop(){
         delay(1500);
       }
     } */
+    for(int s = 0; s < a.length(); s++){
+      if(inserimento == a[s]){
+        nascosta[s] = inserimento;
+        Serial.println(nascosta);
+        delay(1500);
+      } else{
+        
+      }
+    }
 
     i++;
+    
+    if(nascosta == a){
+      lcd.setCursor(0, 1);
+      lcd.print(nascosta + " - WIN");
+      delay(1500);
+    }
+
     if(i == a.length()){
       lcd.clear();
       lcd.setCursor(3, 1);
-      lcd.print(parola);
+      //lcd.print(parola);
 
-      if(parola == a){
+/*       if(parola == a){
         lcd.setCursor(8, 1);       //ULTIMA PARTE 
-        lcd.print("WIN");
+        lcd.print(" - WIN");
         delay(2000);
         lcd.clear();
       }
       else{
         lcd.setCursor(8, 1);
-        lcd.print("LOST");
+        lcd.print(" - LOST");
         delay(2000);
         lcd.clear();
-      }
+      } */
        
       /* BISOGNA FARE I MENU (MENU INIZIALE, DI GIOCO E MENU DELA SCELTA DELLA DIFFICOLTA')
       BISOGNA FARE I CONTROLLI PER OGNI LETTERA.
@@ -102,6 +119,6 @@ void loop(){
 
 int generaNum(){      //funzione che genera un numero a caso seguendo un range 
   int num;
-  num = random (0, 4);
+  num = random (0, 3);
   return num;
 }
