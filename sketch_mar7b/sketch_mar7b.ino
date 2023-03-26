@@ -24,7 +24,7 @@ char pippo = ' ';
 String parola = "";
 String b [] = {"GIO", "CIA", "ALE"}; // parole da generare
 String a = ""; // parola da indovinare
-String nascosta = "***"; // temporaneo
+String nascosta = ""; // temporaneo
 int i = 0, tentativi = 0, z = 0, generated = 0;
 
 void setup(){
@@ -33,6 +33,11 @@ void setup(){
   lcd.init();
   lcd.backlight();
   generated = generaNum(); //variabile a cui viene assegnato il valore in uscita della funzione che genera il numero
+
+  for(int i = 0; i < generated; i++){ //da testare se va o meno, su cpp va
+    nascosta += "*";
+  }
+
 }
 
 void loop(){
@@ -45,7 +50,7 @@ void loop(){
     lcd.setCursor(x, 0);
     lcd.print("*");
   }
-  
+
   if(inserimento){
     lcd.setCursor(i, 1);
     lcd.print(inserimento);
@@ -59,6 +64,8 @@ void loop(){
         delay(1500);
       }
     } */
+
+    // controllo di ogni lettera inserita
     for(int s = 0; s < a.length(); s++){
       if(inserimento == a[s]){
         nascosta[s] = inserimento;
@@ -70,20 +77,19 @@ void loop(){
     }
 
     i++;
-    
-    if(nascosta == a){
-      lcd.setCursor(0, 1);
-      lcd.print(nascosta + " - WIN");
-      delay(1500);
-    }
 
     if(i == a.length()){
+      if(nascosta == a){
+        lcd.setCursor(0, 1);
+        lcd.print(nascosta + " - WIN");
+        delay(1500);
+      }
       lcd.clear();
-      lcd.setCursor(3, 1);
+      //lcd.setCursor(3, 1);
       //lcd.print(parola);
 
 /*       if(parola == a){
-        lcd.setCursor(8, 1);       //ULTIMA PARTE 
+        lcd.setCursor(8, 1);ß
         lcd.print(" - WIN");
         delay(2000);
         lcd.clear();
@@ -99,26 +105,11 @@ void loop(){
       BISOGNA FARE I CONTROLLI PER OGNI LETTERA.
       BISOGNA FARE UN CONTROLLO PER CLEARARE LA PARTE INIZIARE Riga(lcd.print("HangMan - " + a);) DI CODICE .
       BISOGNA FARE LA STRINGA[VETTORE] CHE SERVE PER BANNARE LE PAROLE GIA USCITE DALLA STRINGA[VETTORE] CON TUTTE LE PAROLE. */
-    
-/*       if(parola == a){
-        lcd.clear();
-        lcd.print("Hai Vinto");
-        lcd.setCursor(0, 1);
-        lcd.print(parola);
-      } 
-      else{
-        lcd.clear();
-        lcd.print("Hai Perso");
-        lcd.setCursor(0, 1);
-        lcd.print(parola);
-      } */
     }
 
   }
 }
 
 int generaNum(){      //funzione che genera un numero a caso seguendo un range 
-  int num;
-  num = random (0, 3);
-  return num;
+  return  random (0, 3);
 }
