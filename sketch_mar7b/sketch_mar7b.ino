@@ -22,10 +22,10 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 char inserimento;
 char pippo = ' ';
 String parola = "";
-String b [] = {"GIOA", "CIAO", "ALE"}; // parole da generare
+String b [] = {"PAOLO", "MAMMA", "CAINGERO", "AACC"}; // parole da generare
 String a = ""; // parola da indovinare
 String nascosta = "";
-int i = 0, tentativi = 0, z = 0, generated = 0;
+int i = 0, tentativi = 0, tent = 6, generated = 0;
 
 void setup(){
   Serial.begin(9600);
@@ -47,7 +47,7 @@ void loop(){
 
   lcd.setCursor(0, 0);
   lcd.print("HangMan - ");
-  lcd.setCursor(11, 0);
+  lcd.setCursor(10, 0);
   lcd.print(nascosta);
 
 /*   for(int x = 10; x < a.length()+10; x++){
@@ -73,16 +73,24 @@ void loop(){
     for(int s = 0; s < a.length(); s++){
       if(inserimento == a[s]){
         nascosta[s] = inserimento;
-        Serial.println(nascosta);
-        delay(1500);
-      } else{
-        
+        Serial.println(nascosta + "" + tent);
+        delay(500);
+      }
+      else{
+        //tent -= 1; // da fixare
       }
     }
 
     i++;
+    delay(500);
 
     if(i == a.length()){
+/*       if(tent < 0){
+        lcd.clear();
+        lcd.setCursor(0, 1);
+        lcd.print("Sei MORTO");
+        delay(2000);
+      } */
       //check se la parola composta anche non in ordine è corretta
       lcd.clear();
       if(nascosta == a){
@@ -104,9 +112,9 @@ void loop(){
       } */
        
       //BISOGNA FARE I MENU (MENU INIZIALE, DI GIOCO E MENU DELA SCELTA DELLA DIFFICOLTA')
-      //BISOGNA FARE I CONTROLLI PER OGNI LETTERA.
-      //BISOGNA FARE UN CONTROLLO PER CLEARARE LA PARTE INIZIARE Riga(lcd.print("HangMan - " + a); DI CODICE .
+      //BISOGNA FARE I CONTROLLI PER OGNI LETTERA. (FATTO)
       //BISOGNA FARE LA STRINGA[VETTORE] CHE SERVE PER BANNARE LE PAROLE GIA USCITE DALLA STRINGA[VETTORE] CON TUTTE LE PAROLE.
+      //METTERE UN BUZZ SUONO BELLO SE HA INDOVINATO LA LETTERA E BRUTTO SE LA SBAGLIA
     }
 
   }
