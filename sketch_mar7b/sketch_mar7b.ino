@@ -22,9 +22,9 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 char inserimento;
 char pippo = ' ';
 String parola = "";
-String b [] = {"GIO", "CIA", "ALE"}; // parole da generare
+String b [] = {"GIOA", "CIAO", "ALE"}; // parole da generare
 String a = ""; // parola da indovinare
-String nascosta = ""; // temporaneo
+String nascosta = "";
 int i = 0, tentativi = 0, z = 0, generated = 0;
 
 void setup(){
@@ -33,8 +33,10 @@ void setup(){
   lcd.init();
   lcd.backlight();
   generated = generaNum(); //variabile a cui viene assegnato il valore in uscita della funzione che genera il numero
+  
+  a = b[generated];
 
-  for(int i = 0; i < generated; i++){ //da testare se va o meno, su cpp va
+  for(int i = 0; i < a.length(); i++){ //da testare se va o meno, su cpp va
     nascosta += "*";
   }
 
@@ -42,14 +44,16 @@ void setup(){
 
 void loop(){
   inserimento = customKeypad.getKey();
-  a = b[generated];
+
   lcd.setCursor(0, 0);
   lcd.print("HangMan - ");
+  lcd.setCursor(11, 0);
+  lcd.print(nascosta);
 
-  for(int x = 10; x < a.length()+10; x++){
+/*   for(int x = 10; x < a.length()+10; x++){
     lcd.setCursor(x, 0);
     lcd.print("*");
-  }
+  } */
 
   if(inserimento){
     lcd.setCursor(i, 1);
@@ -65,7 +69,7 @@ void loop(){
       }
     } */
 
-    // controllo di ogni lettera inserita
+    //controllo di ogni lettera inserita
     for(int s = 0; s < a.length(); s++){
       if(inserimento == a[s]){
         nascosta[s] = inserimento;
@@ -79,32 +83,30 @@ void loop(){
     i++;
 
     if(i == a.length()){
-      if(nascosta == a){
-        lcd.setCursor(0, 1);
-        lcd.print(nascosta + " - WIN");
-        delay(1500);
-      }
+      //check se la parola composta anche non in ordine è corretta
       lcd.clear();
-      //lcd.setCursor(3, 1);
-      //lcd.print(parola);
-
+      if(nascosta == a){
+        lcd.setCursor(3, 1);
+        lcd.print(nascosta + " - WIN");
+        delay(2000);
+      }
 /*       if(parola == a){
-        lcd.setCursor(8, 1);ß
+        lcd.setCursor(3, 1);
         lcd.print(" - WIN");
         delay(2000);
         lcd.clear();
       }
       else{
-        lcd.setCursor(8, 1);
+        lcd.setCursor(3, 1);
         lcd.print(" - LOST");
         delay(2000);
         lcd.clear();
       } */
        
-      /* BISOGNA FARE I MENU (MENU INIZIALE, DI GIOCO E MENU DELA SCELTA DELLA DIFFICOLTA')
-      BISOGNA FARE I CONTROLLI PER OGNI LETTERA.
-      BISOGNA FARE UN CONTROLLO PER CLEARARE LA PARTE INIZIARE Riga(lcd.print("HangMan - " + a);) DI CODICE .
-      BISOGNA FARE LA STRINGA[VETTORE] CHE SERVE PER BANNARE LE PAROLE GIA USCITE DALLA STRINGA[VETTORE] CON TUTTE LE PAROLE. */
+      //BISOGNA FARE I MENU (MENU INIZIALE, DI GIOCO E MENU DELA SCELTA DELLA DIFFICOLTA')
+      //BISOGNA FARE I CONTROLLI PER OGNI LETTERA.
+      //BISOGNA FARE UN CONTROLLO PER CLEARARE LA PARTE INIZIARE Riga(lcd.print("HangMan - " + a); DI CODICE .
+      //BISOGNA FARE LA STRINGA[VETTORE] CHE SERVE PER BANNARE LE PAROLE GIA USCITE DALLA STRINGA[VETTORE] CON TUTTE LE PAROLE.
     }
 
   }
