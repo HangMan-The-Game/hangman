@@ -11,8 +11,8 @@ char tasti[ROWS][COLS] = {
   {'O', 'P', 'Q', 'R'}
 };
 
-byte rowPins[ROWS] = {10, 9, 8, 7};
-byte colPins[COLS] = {6, 5, 4, 3};
+byte rowPins[ROWS] = {13, 12, 11, 10};
+byte colPins[COLS] = {9, 8, 7, 6};
 
 Keypad customKeypad = Keypad(makeKeymap(tasti), rowPins, colPins, ROWS, COLS);
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -34,14 +34,14 @@ bool flag = false;
 
 void setup(){
   Serial.begin(9600);
-  randomSeed(analogRead(0)); // trovare un'altra soluzione con il millis()
+  randomSeed(analogRead(0)); //trovare un'altra soluzione con il millis()
   lcd.init();
   lcd.backlight();
   generated = generaNum(); //variabile a cui viene assegnato il valore in uscita della funzione che genera il numero
   
   a = b[generated];
 
-  Serial.println(a);
+  Serial.println(a + " | " + generated);
 
   for(int i = 0; i < a.length(); i++){ //da testare se va o meno, su cpp va
     nascosta += "*";
@@ -88,16 +88,33 @@ void loop(){
         nascosta[s] = inserimento;
         //Serial.println(nascosta + "" + tent);
         delay(500);
-      }
-      else{
+        tent++;
+      } else{
         //tent -= 1; // da fixare
       }
     }
-
+    tent++;
     i++;
     delay(500);
     if(nascosta == a){
       i = a.length();
+    }
+    if(tent == i){
+      if(nascosta == a){
+        lcd.setCursor(0, 0);
+        lcd.print("HangMan");
+        lcd.setCursor(0, 1);
+        lcd.print(a + " | " + nascosta + " - WIN");
+        delay(2000);
+        lcd.clear();
+      } else{
+        lcd.setCursor(0, 0);
+        lcd.print("HangMan");
+        lcd.setCursor(0, 1);
+        lcd.print(a + " | " + nascosta + " - LOST");
+        delay(2000);
+        lcd.clear();
+      }
     }
     if(i == a.length()){
       flag = true;
@@ -107,20 +124,21 @@ void loop(){
         lcd.print("Sei MORTO");
         delay(2000);
       } */
+
       //check se la parola composta anche non in ordine è corretta
       lcd.clear();
       if(nascosta == a){
         lcd.setCursor(0, 0);
         lcd.print("HangMan");
         lcd.setCursor(0, 1);
-        lcd.print(nascosta + " - WIN");
+        lcd.print(a + " - WIN");
         delay(2000);
         lcd.clear();
       } else{
         lcd.setCursor(0, 0);
         lcd.print("HangMan");
         lcd.setCursor(0, 1);
-        lcd.print(nascosta + " - LOST");
+        lcd.print(a + " - LOST");
         delay(2000);
         lcd.clear();
       }
@@ -148,5 +166,5 @@ void loop(){
 }
 
 int generaNum(){      //funzione che genera un numero a caso seguendo un range 
-  return  random (0, 30);
+  return random(0, 199);
 }
