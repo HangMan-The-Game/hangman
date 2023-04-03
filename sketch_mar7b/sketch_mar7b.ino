@@ -6,7 +6,7 @@ const byte COLS = 4; //colonne
 
 char tasti[ROWS][COLS] = {
   {'A', 'B', 'C', 'D'},
-  {'E', 'F', 'G', 'H'},
+  {'E', 'F', 'G', 'U'},
   {'I', 'L', 'M', 'N'},
   {'O', 'P', 'Q', 'R'}
 };
@@ -22,10 +22,15 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 char inserimento;
 char pippo = ' ';
 String parola = "";
-String b [] = {"PAOLO", "MAMMA", "CAINGERO", "AACC"}; // parole da generare
+String b [] = {
+  #include "/Users/alerunza/Documents/Arduino/sketch_mar7b/parole.txt"
+};
+//String b [] = {"PAOLO", "MAMMA", "CAINGERO", "AACC"}; // parole da generare
 String a = ""; // parola da indovinare
 String nascosta = "";
 int i = 0, tentativi = 0, tent = 6, generated = 0;
+
+bool flag = false;
 
 void setup(){
   Serial.begin(9600);
@@ -35,6 +40,8 @@ void setup(){
   generated = generaNum(); //variabile a cui viene assegnato il valore in uscita della funzione che genera il numero
   
   a = b[generated];
+
+  Serial.println(a);
 
   for(int i = 0; i < a.length(); i++){ //da testare se va o meno, su cpp va
     nascosta += "*";
@@ -56,6 +63,12 @@ void loop(){
   } */
 
   if(inserimento){
+    if(flag){
+      i = 0;
+    }
+    if(i == 0){
+      flag = false;
+    }
     lcd.setCursor(i, 1);
     lcd.print(inserimento);
     parola += inserimento;
@@ -73,7 +86,7 @@ void loop(){
     for(int s = 0; s < a.length(); s++){
       if(inserimento == a[s]){
         nascosta[s] = inserimento;
-        Serial.println(nascosta + "" + tent);
+        //Serial.println(nascosta + "" + tent);
         delay(500);
       }
       else{
@@ -83,8 +96,11 @@ void loop(){
 
     i++;
     delay(500);
-
+    if(nascosta == a){
+      i = a.length();
+    }
     if(i == a.length()){
+      flag = true;
 /*       if(tent < 0){
         lcd.clear();
         lcd.setCursor(0, 1);
@@ -94,10 +110,21 @@ void loop(){
       //check se la parola composta anche non in ordine è corretta
       lcd.clear();
       if(nascosta == a){
-        lcd.setCursor(3, 1);
+        lcd.setCursor(0, 0);
+        lcd.print("HangMan");
+        lcd.setCursor(0, 1);
         lcd.print(nascosta + " - WIN");
         delay(2000);
+        lcd.clear();
+      } else{
+        lcd.setCursor(0, 0);
+        lcd.print("HangMan");
+        lcd.setCursor(0, 1);
+        lcd.print(nascosta + " - LOST");
+        delay(2000);
+        lcd.clear();
       }
+
 /*       if(parola == a){
         lcd.setCursor(3, 1);
         lcd.print(" - WIN");
@@ -110,9 +137,9 @@ void loop(){
         delay(2000);
         lcd.clear();
       } */
-       
+      
       //BISOGNA FARE I MENU (MENU INIZIALE, DI GIOCO E MENU DELA SCELTA DELLA DIFFICOLTA')
-      //BISOGNA FARE I CONTROLLI PER OGNI LETTERA. (FATTO)
+      //BISOGNA FARE I CONTROLLI PER OGNI LETTERA. (FATTO, MA DA FINIRE)
       //BISOGNA FARE LA STRINGA[VETTORE] CHE SERVE PER BANNARE LE PAROLE GIA USCITE DALLA STRINGA[VETTORE] CON TUTTE LE PAROLE.
       //METTERE UN BUZZ SUONO BELLO SE HA INDOVINATO LA LETTERA E BRUTTO SE LA SBAGLIA
     }
@@ -121,5 +148,5 @@ void loop(){
 }
 
 int generaNum(){      //funzione che genera un numero a caso seguendo un range 
-  return  random (0, 3);
+  return  random (0, 30);
 }
