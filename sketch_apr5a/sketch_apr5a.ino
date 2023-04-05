@@ -6,7 +6,7 @@ const byte COLS = 4; //colonne
 
 char keys[ROWS][COLS] = {
   {'1','2','3','4'},
-  {'I','J','K','L'},
+  {'P','A','O','L'},
   {'Q','R','S','T'},
   {'*','°','#','?'},
 };
@@ -163,7 +163,6 @@ void loop(){
 
         }
       }
-
       key = firstKpd.getKey();
         if(key == '3'){
           dato = 0;
@@ -177,11 +176,13 @@ void loop(){
       }
     }
   }
-    if(key == '2'){ 
-      lcd.clear();
-      lcd.setCursor(0,0);
+  if(key == '2'){
+    lcd.clear();
+    lello = 1;
+    while(lello){
+      lcd.setCursor(0, 0);
       lcd.print("1E 2M 3H");
-      lcd.setCursor(0,1);
+      lcd.setCursor(0, 1);
       lcd.print("4 MENU");
       dato = 1;
       while(dato){
@@ -190,32 +191,37 @@ void loop(){
           lcd.clear();
           lcd.setCursor(0, 0);
           lcd.print("Easy Mode");
-          lcd.setCursor(0, 1);
-          lcd.print("4 MENU");
+          delay(1500);
+          lcd.clear();
+          dato = 0;
         }
         if(key == '2'){
           lcd.clear();
           lcd.setCursor(0, 0);
           lcd.print("Medium Mode");
-          lcd.setCursor(0, 1);
-          lcd.print("4 MENU");
+          delay(1500);
+          lcd.clear();
+          dato = 0;
         }
         if(key == '3'){
           lcd.clear();
           lcd.setCursor(0, 0);
           lcd.print("Hard Mode");
-          lcd.setCursor(0, 1);
-          lcd.print("4 MENU");
+          delay(1500);
+          lcd.clear();
+          dato = 0;
         }
         if(key == '4'){
-          dato = 0;
           lcd.clear();
           lcd.setCursor(0,1);
           lcd.print("Return to MENU");
           delay(2000);
           lcd.clear();
           key = 0;
+          dato = 0;
+          lello = 0;
         }
       }
     }
+  }
 }
