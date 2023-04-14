@@ -11,20 +11,20 @@ char keys[ROWS][COLS] = {
   {'Y','Z','K','L'},
 };
 
-char keys2[ROWS][COLS] = {
+/* char keys2[ROWS][COLS] = {
   {'E','F','G','H'},
   {'M','N','O','P'},
   {'U','V','W','X'},
   {'B','N','M','D'},
-};
+}; */
 
-byte rowPins[ROWS] = {29, 28, 27, 26};
-byte colPins[COLS] = {25, 24, 23, 22};
-byte rowPins2[ROWS] = {37, 36, 35, 34};
-byte colPins2[COLS] = {33, 32, 31, 30};
+byte rowPins[ROWS] = {10, 9, 8, 7};
+byte colPins[COLS] = {6, 5, 4, 3};
+/* byte rowPins2[ROWS] = {37, 36, 35, 34};
+byte colPins2[COLS] = {33, 32, 31, 30}; */
 
 Keypad firstKpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
-Keypad secondKpd = Keypad(makeKeymap(keys2), rowPins2, colPins2, ROWS, COLS);
+//Keypad secondKpd = Keypad(makeKeymap(keys2), rowPins2, colPins2, ROWS, COLS);
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 //BISOGNA FARE I MENU (MENU INIZIALE, DI GIOCO E MENU DELA SCELTA DELLA DIFFICOLTA')
@@ -35,13 +35,18 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 //dichiarazioni
 char input, input2;
 String parola = "";
-String b [] = {
+/* String b [] = {
   #include "/Users/alerunza/Documents/Arduino/sketch_mar7b/parole.txt"
+}; */
+
+String b [] = {
+  "TOVAGLIA", "TAZZA", "TAPPETO", "UOVO", "UVA", "UCCELLO", "VALIGIA", "VETRO", "VASSOIO", "VINO", "VIDEOCAMERA"
 };
+
 //String b [] = {"PAOLO", "MAMMA", "CAINGERO", "AACC"}; // parole da generare
 String a = ""; //parola da indovinare
 String hidden = "";
-int i = 0, tent = 6, generated = 0, z = 0;
+int i = 0, tent = 6, generated = 0, z = 0, g = 0;
 bool flag = false;
 
 void setup(){
@@ -53,12 +58,14 @@ void setup(){
 
 void loop(){
   input = firstKpd.getKey();
-  input2 = secondKpd.getKey();
+  //input2 = secondKpd.getKey();
   
   while(z == 0){
+    tent = 6;
     hidden = "";
     generated = random(10);
-    a = b[generated];
+    //a = b[generated];
+    a = "CIAQ";
     Serial.println(a + " | " + generated);
     for(int i = 0; i < a.length(); i++){
       hidden += "*";
@@ -93,9 +100,11 @@ void loop(){
       if(input == a[s]){
         hidden[s] = input;
         delay(500);
+        g++;
+        Serial.println(g);
       }
     else if(a.charAt(s)!=input){
-        h++; // da fixare
+        h++;
       }
     }
     if(h==a.length()){
@@ -103,32 +112,28 @@ void loop(){
     }
     h=0;
 
-
     i++;
     delay(500);
-    if(hidden == a){
-      i = a.length();
-    }
-    if(tent == i){
-      if(hidden == a){
-        lcd.setCursor(0, 0);
-        lcd.print("HangMan");
-        lcd.setCursor(0, 1);
-        lcd.print(a + " | " + hidden + " - WIN");
-        delay(2000);
-        lcd.clear();
-        z = 0;
-      } else{
-        lcd.setCursor(0, 0);
-        lcd.print("HangMan");
-        lcd.setCursor(0, 1);
-        lcd.print(a + " | " + hidden + " - LOST");
-        delay(2000);
-        lcd.clear();
-        z = 0;
-      }
-    }
-    if(tent < 1){
+
+/*     if(hidden == a){
+      lcd.setCursor(0, 0);
+      lcd.print("HangMan");
+      lcd.setCursor(0, 1);
+      lcd.print(a + " - WIN");
+      delay(2000);
+      lcd.clear();
+      z = 0;
+    } else{
+      lcd.setCursor(0, 0);
+      lcd.print("HangMan");
+      lcd.setCursor(0, 1);
+      lcd.print(a + " - LOST1 ");
+      delay(2000);
+      lcd.clear();
+      z = 0;
+    } */
+
+    if(tent < 1 || g == a.length()){
     /* if(i == a.length()){ */
       flag = true;
 
@@ -146,7 +151,7 @@ void loop(){
         lcd.setCursor(0, 0);
         lcd.print("HangMan");
         lcd.setCursor(0, 1);
-        lcd.print(a + " - LOST");
+        lcd.print(a + " - LOST2 ");
         delay(2000);
         lcd.clear();
         z = 0;
