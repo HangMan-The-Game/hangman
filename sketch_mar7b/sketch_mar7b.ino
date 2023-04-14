@@ -41,7 +41,7 @@ String b [] = {
 //String b [] = {"PAOLO", "MAMMA", "CAINGERO", "AACC"}; // parole da generare
 String a = ""; //parola da indovinare
 String hidden = "";
-int i = 0, tent = 6, generated = 0;
+int i = 0, tent = 6, generated = 0, z = 0;
 bool flag = false;
 
 void setup(){
@@ -49,26 +49,28 @@ void setup(){
   randomSeed(analogRead(0)); //trovare un'altra soluzione con il millis()
   lcd.init();
   lcd.backlight();
-  generated = generaNum(); //variabile a cui viene assegnato il valore in uscita della funzione che genera il numero
-
-  a = b[generated];
-
-  Serial.println(a + " | " + generated);
-
-  for(int i = 0; i < a.length(); i++){
-    hidden += "*";
-  }
-
 }
 
 void loop(){
   input = firstKpd.getKey();
   input2 = secondKpd.getKey();
+  
+  while(z == 0){
+    hidden = "";
+    generated = random(10);
+    a = b[generated];
+    Serial.println(a + " | " + generated);
+    for(int i = 0; i < a.length(); i++){
+      hidden += "*";
+    }
+    z = 1;
+  }
 
+  
   lcd.setCursor(0, 0);
 /*   lcd.print("HangMan - ");
   lcd.setCursor(10, 0); */
-  lcd.print(hidden);
+  lcd.print(hidden + " - " + tent);
 
 /*   for(int x = 10; x < a.length()+10; x++){
     lcd.setCursor(x, 0);
@@ -85,18 +87,23 @@ void loop(){
     lcd.setCursor(i, 1);
     lcd.print(input);
     parola += input;
-
+    int h=0;
     //controllo di ogni lettera inserita
     for(int s = 0; s < a.length(); s++){
       if(input == a[s]){
         hidden[s] = input;
         delay(500);
-        tent++;
-      } else{
-        //tent -= 1; // da fixare
+      }
+    else if(a.charAt(s)!=input){
+        h++; // da fixare
       }
     }
-    tent++;
+    if(h==a.length()){
+      tent--;
+    }
+    h=0;
+
+
     i++;
     delay(500);
     if(hidden == a){
@@ -110,6 +117,7 @@ void loop(){
         lcd.print(a + " | " + hidden + " - WIN");
         delay(2000);
         lcd.clear();
+        z = 0;
       } else{
         lcd.setCursor(0, 0);
         lcd.print("HangMan");
@@ -117,9 +125,11 @@ void loop(){
         lcd.print(a + " | " + hidden + " - LOST");
         delay(2000);
         lcd.clear();
+        z = 0;
       }
     }
-    if(i == a.length()){
+    if(tent < 1){
+    /* if(i == a.length()){ */
       flag = true;
 
       //check se la parola composta anche non in ordine è corretta
@@ -131,6 +141,7 @@ void loop(){
         lcd.print(a + " - WIN");
         delay(2000);
         lcd.clear();
+        z = 0;
       } else{
         lcd.setCursor(0, 0);
         lcd.print("HangMan");
@@ -138,6 +149,7 @@ void loop(){
         lcd.print(a + " - LOST");
         delay(2000);
         lcd.clear();
+        z = 0;
       }
     }
 
@@ -163,7 +175,6 @@ void loop(){
         //tent -= 1; // da fixare
       }
     }
-    tent++;
     i++;
     delay(500);
     if(hidden == a){
@@ -197,6 +208,7 @@ void loop(){
         lcd.print(a + " - WIN");
         delay(2000);
         lcd.clear();
+        z = 0;
       } else{
         lcd.setCursor(0, 0);
         lcd.print("HangMan");
@@ -204,6 +216,7 @@ void loop(){
         lcd.print(a + " - LOST");
         delay(2000);
         lcd.clear();
+        z = 0;
       }
     }
 
