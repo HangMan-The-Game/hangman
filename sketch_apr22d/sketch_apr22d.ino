@@ -17,7 +17,7 @@ char keys2[ROWS][COLS] = {
   {'E','F','G','H'},
   {'M','N','O','P'},
   {'U','V','W','X'},
-  {'Z','Y','M','D'},
+  {'Z','Y','|','?'},
 };
 
 byte rowPins[ROWS] = {29, 28, 27, 26};
@@ -50,7 +50,7 @@ const int TS_LEFT = 948, TS_RT = 233, TS_TOP = 139, TS_BOT = 921;
 
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
 MCUFRIEND_kbv tft;
-Adafruit_GFX_Button start, diff, easy, med, hard, backhome, indovina;
+Adafruit_GFX_Button start, diff, easy, med, hard, backhome;
 
 String menu = "home";
 int mode = 1;
@@ -68,6 +68,9 @@ String prendi;
 int i = 0, tent = 6, generated = 0, z = 0, g = 0, y = 0, scelta = 1, lello = 0;
 bool flag = false, guessed = false;
 
+//BUZZ SECTION
+
+int speakerPin = 53;
 
 int pixel_x, pixel_y;  //Touch_getXY() updates global vars
 bool Touch_getXY(void) {
@@ -85,8 +88,10 @@ bool Touch_getXY(void) {
 }
 
 void setup() {
+  pinMode(speakerPin, OUTPUT);
   randomSeed(analogRead(0));
   Serial.begin(9600);
+  Serial1.begin(9600);
   uint16_t ID = tft.readID();
   if (ID == 0xD3D3) ID = 0x9486;  // write-only shield
   tft.begin(ID);
@@ -115,7 +120,7 @@ void setup() {
 
 // Array of button addresses to behave like a list
 Adafruit_GFX_Button *buttons[] = {
-  &start, &diff, &easy, &med, &hard, &backhome, &indovina, NULL
+  &start, &diff, &easy, &med, &hard, &backhome, NULL
   };
 
 bool update_button(Adafruit_GFX_Button *b, bool down) {
@@ -167,12 +172,8 @@ void loop() {
     }
     if(buttons[5]->isPressed()){
       menu = "home";
+
       home();
-    }
-    if(buttons[6]->isPressed()){
-      menu = "guess";
-      guessed = true;
-      //guess();
     }
   }
   Serial.println(menu + " mode: " + mode);
@@ -220,6 +221,7 @@ void home(){
 void startgame(){
   while (z == 0) {
     tent = 6;
+    Serial1.println("9");
     hidden = "";
     wrong = "";
     lello = 1;
@@ -317,8 +319,10 @@ void startgame(){
             is_wrong = true;
           } else{
               wrong += input;
+              Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
+                Serial1.println(tent);
               }
           }
         }
@@ -343,7 +347,7 @@ void startgame(){
       if (tent < 1 || hidden == a) {
         flag = true;
         if (hidden == a) {
-          tft.setCursor(50, 120);
+          tft.setCursor(50, 220);
           tft.setTextColor(GREEN);
           tft.setTextSize(4);
           tft.print(a + " - WIN");
@@ -351,7 +355,7 @@ void startgame(){
           z = 0;
           lello = 0;
         } else {
-          tft.setCursor(50, 120);
+          tft.setCursor(50, 220);
           tft.setTextColor(RED);
           tft.setTextSize(4);
           tft.print(a + " - LOST");
@@ -363,6 +367,9 @@ void startgame(){
     }
 
     if (input2) {
+      if(input2 == '?'){
+        //guess();
+      }
       if (flag) {
         i = 0;
       }
@@ -402,8 +409,10 @@ void startgame(){
             is_wrong = true;
           } else{
               wrong += input2;
+              Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
+                Serial1.println(tent);
               }
           }
         }
@@ -428,7 +437,7 @@ void startgame(){
       if (tent < 1 || hidden == a) {
         flag = true;
         if (hidden == a) {
-          tft.setCursor(50, 120);
+          tft.setCursor(50, 220);
           tft.setTextColor(GREEN);
           tft.setTextSize(4);
           tft.print(a + " - WIN");
@@ -436,7 +445,7 @@ void startgame(){
           z = 0;
           lello = 0;
         } else {
-          tft.setCursor(50, 120);
+          tft.setCursor(50, 220);
           tft.setTextColor(RED);
           tft.setTextSize(4);
           tft.print(a + " - LOST");
@@ -450,7 +459,7 @@ void startgame(){
 
   start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
-  backhome.initButton(&tft, 390, 270, 120, 40, WHITE, BLUE, WHITE, "HOME", 4);
+  backhome.initButton(&tft, 390, 290, 120, 40, WHITE, BLUE, WHITE, "HOME", 4);
   backhome.drawButton(false);
 
   update_button_list(buttons);
@@ -463,7 +472,7 @@ void startgame(){
   }
 }
 
-void guess(){
+/* void guess(){
   lello = 1;
   tft.fillScreen(BLACK);
   tft.setCursor(120, 25);
@@ -481,7 +490,6 @@ void guess(){
   tft.print(hidden);
 
   start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
-  indovina.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   backhome.initButton(&tft, 390, 270, 120, 40, WHITE, BLUE, WHITE, "HOME", 4);
   backhome.drawButton(false);
@@ -497,13 +505,13 @@ void guess(){
       lello = 0;
     }
 
+    for (int s = 0; s < a.length(); s++) {
+      if(hidden[s] == "_"){
+        i = s;
+      }
+    }
+    
     if (input) {
-      if (flag) {
-        i = 0;
-      }
-      if (i == 0) {
-        flag = false;
-      }
 
       hidden[i] = input;
       delay(500);
@@ -517,7 +525,7 @@ void guess(){
       if (i == a.length()) {
         flag = true;
         if (hidden == a) {
-          tft.setCursor(50, 120);
+          tft.setCursor(50, 180);
           tft.setTextColor(GREEN);
           tft.setTextSize(4);
           tft.print(a + " - WIN");
@@ -525,7 +533,7 @@ void guess(){
           z = 0;
           lello = 0;
         } else {
-          tft.setCursor(50, 120);
+          tft.setCursor(50, 180);
           tft.setTextColor(RED);
           tft.setTextSize(4);
           tft.print(a + " - LOST");
@@ -537,12 +545,6 @@ void guess(){
     }
 
     if (input2) {
-      if (flag) {
-        i = 0;
-      }
-      if (i == 0) {
-        flag = false;
-      }
 
       hidden[i] = input2;
       delay(500);
@@ -556,7 +558,7 @@ void guess(){
       if (i == a.length()) {
         flag = true;
         if (hidden == a) {
-          tft.setCursor(50, 120);
+          tft.setCursor(50, 180);
           tft.setTextColor(GREEN);
           tft.setTextSize(4);
           tft.print(a + " - WIN");
@@ -564,7 +566,7 @@ void guess(){
           z = 0;
           lello = 0;
         } else {
-          tft.setCursor(50, 120);
+          tft.setCursor(50, 180);
           tft.setTextColor(RED);
           tft.setTextSize(4);
           tft.print(a + " - LOST");
@@ -578,18 +580,10 @@ void guess(){
 
   start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
-  indovina.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
 
 
   update_button_list(buttons);
-/*   if (buttons[5]->isPressed()) {
-    Serial.println(5);
-    buttons[5]->drawButton(true);
-  }
-  if (buttons[5]->justReleased()) {
-    buttons[5]->drawButton(false);
-  } */
-}
+} */
 
 void difficolta(){
   start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
