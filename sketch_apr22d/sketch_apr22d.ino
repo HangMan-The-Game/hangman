@@ -10,14 +10,14 @@ char keys[ROWS][COLS] = {
   {'A','B','C','D'},
   {'I','J','K','L'},
   {'Q','R','S','T'},
-  {'Y','Z','K','L'},
+  {'Y','Z','Z','Z'},
 };
 
 char keys2[ROWS][COLS] = {
   {'E','F','G','H'},
   {'M','N','O','P'},
   {'U','V','W','X'},
-  {'Z','Y','|','?'},
+  {'Z','Y','?','|'},
 };
 
 byte rowPins[ROWS] = {29, 28, 27, 26};
@@ -58,7 +58,13 @@ int mode = 1;
 String ndiff = "Easy";
 
 String b [] = {
-  #include "/Users/alerunza/Documents/Arduino/sketch_mar7b/parole.txt"
+  #include "/Users/alerunza/Documents/Arduino/sketch_mar7b/ENG/word.txt"
+};
+String c [] = {
+  #include "/Users/alerunza/Documents/Arduino/sketch_mar7b/ENG/word2.txt"
+};
+String d [] = {
+  #include "/Users/alerunza/Documents/Arduino/sketch_mar7b/ENG/word3.txt"
 };
 
 String a = ""; //parola da indovinare
@@ -70,7 +76,7 @@ bool flag = false, guessed = false;
 
 //BUZZ SECTION
 
-int speakerPin = 53;
+int speakerPin = 38;
 
 int pixel_x, pixel_y;  //Touch_getXY() updates global vars
 bool Touch_getXY(void) {
@@ -112,7 +118,7 @@ void setup() {
   }
 
   start.initButton(&tft, 90, 100, 140, 40, WHITE, BLUE, WHITE, "START", 4);
-  diff.initButton(&tft, 120, 150, 240, 40, WHITE, GREEN, WHITE, "DIFFICULTY", 4);
+  diff.initButton(&tft, 90, 150, 140, 40, WHITE, GREEN, WHITE, "MODE", 4);
 
   start.drawButton(false);
   diff.drawButton(false);
@@ -202,7 +208,7 @@ void home(){
   }
 
   start.initButton(&tft, 90, 100, 140, 40, WHITE, BLUE, WHITE, "START", 4);
-  diff.initButton(&tft, 120, 150, 240, 40, WHITE, GREEN, WHITE, "DIFFICULTY", 4);
+  diff.initButton(&tft, 90, 150, 140, 40, WHITE, GREEN, WHITE, "MODE", 4);
 
   start.drawButton(false);
   diff.drawButton(false);
@@ -234,17 +240,17 @@ void startgame(){
         ndiff = "Easy";
         break;
       case 2:
-        a = b[generated];
+        a = c[generated];
         //a = "CIAB";
         ndiff = "Medium";
         break;
       case 3:
-        a = b[generated];
+        a = d[generated];
         //a = "CIIAJ";
         ndiff = "Hard";
         break;
       default:
-        a = "CIAQ";
+        a = "TOMATO";
         break;
     }
     g = 0;
@@ -323,6 +329,9 @@ void startgame(){
               if (h == a.length()) {
                 tent--;
                 Serial1.println(tent);
+                tone(speakerPin, 500);
+                delay(1000);
+                noTone(speakerPin);
               }
           }
         }
@@ -347,15 +356,16 @@ void startgame(){
       if (tent < 1 || hidden == a) {
         flag = true;
         if (hidden == a) {
-          tft.setCursor(50, 220);
+          tft.setCursor(50, 240);
           tft.setTextColor(GREEN);
           tft.setTextSize(4);
-          tft.print(a + " - WIN");
+          tft.print(a + " - WIN"); 
           delay(1000);
+
           z = 0;
           lello = 0;
         } else {
-          tft.setCursor(50, 220);
+          tft.setCursor(50, 240);
           tft.setTextColor(RED);
           tft.setTextSize(4);
           tft.print(a + " - LOST");
@@ -366,9 +376,16 @@ void startgame(){
       }
     }
 
+    bool special = false;
+
     if (input2) {
       if(input2 == '?'){
         //guess();
+      }
+      if(input2 == '|'){
+        lello = 0;
+        z = 0;
+        special = true;
       }
       if (flag) {
         i = 0;
@@ -408,12 +425,19 @@ void startgame(){
           if(input2 == wrong[i]){
             is_wrong = true;
           } else{
+            if(special){
+              break;
+            }else{
               wrong += input2;
               Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
                 Serial1.println(tent);
+                tone(speakerPin, 500);
+                delay(1000);
+                noTone(speakerPin);
               }
+            }
           }
         }
       }
@@ -437,7 +461,7 @@ void startgame(){
       if (tent < 1 || hidden == a) {
         flag = true;
         if (hidden == a) {
-          tft.setCursor(50, 220);
+          tft.setCursor(50, 240);
           tft.setTextColor(GREEN);
           tft.setTextSize(4);
           tft.print(a + " - WIN");
@@ -445,7 +469,7 @@ void startgame(){
           z = 0;
           lello = 0;
         } else {
-          tft.setCursor(50, 220);
+          tft.setCursor(50, 240);
           tft.setTextColor(RED);
           tft.setTextSize(4);
           tft.print(a + " - LOST");
@@ -513,7 +537,21 @@ void startgame(){
     
     if (input) {
 
-      hidden[i] = input;
+      for(int s = 0; s < hidden.length(); s++){
+        if(!hidden.charAt(s) == '_'){
+          indovinate = input;
+        }
+        if(hidden.charAt(s) == '_'){
+          hidden[s] = input;
+          tft.setCursor(20, 100);
+          tft.setTextColor(BLUE, BLACK);
+          tft.setTextSize(6);
+          tft.print(hidden);
+          i++;
+        } else{
+          i = s;
+        }
+      }
       delay(500);
       tft.setCursor(20, 100);
       tft.setTextColor(BLUE, BLACK);
