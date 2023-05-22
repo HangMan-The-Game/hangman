@@ -10,7 +10,7 @@ char keys[ROWS][COLS] = {
   {'A','B','C','D'},
   {'I','J','K','L'},
   {'Q','R','S','T'},
-  {'Y','Z','Z','Z'},
+  {'Y','Z','Z','='},
 };
 
 char keys2[ROWS][COLS] = {
@@ -69,10 +69,10 @@ String d [] = {
 
 String a = ""; //parola da indovinare
 int nword = 50, randomized = 0;
-String hidden = "", wrong = "";
+String hidden = "", wrong = "", beforeguess = "";
 String prendi;
 int i = 0, tent = 6, generated = 0, z = 0, g = 0, y = 0, scelta = 1, lello = 0;
-bool flag = false, guessed = false;
+bool flag = false, guessed = false, guessmode = false;
 
 //BUZZ SECTION
 
@@ -359,7 +359,7 @@ void startgame(){
           tft.setCursor(50, 240);
           tft.setTextColor(GREEN);
           tft.setTextSize(4);
-          tft.print(a + " - WIN"); 
+          tft.print(a + " - WON"); 
           delay(1000);
 
           z = 0;
@@ -380,7 +380,8 @@ void startgame(){
 
     if (input2) {
       if(input2 == '?'){
-        //guess();
+        beforeguess = hidden;
+        guess();
       }
       if(input2 == '|'){
         lello = 0;
@@ -464,7 +465,7 @@ void startgame(){
           tft.setCursor(50, 240);
           tft.setTextColor(GREEN);
           tft.setTextSize(4);
-          tft.print(a + " - WIN");
+          tft.print(a + " - WON");
           delay(1000);
           z = 0;
           lello = 0;
@@ -496,14 +497,15 @@ void startgame(){
   }
 }
 
-/* void guess(){
+void guess(){
+  guessmode = true;
   lello = 1;
   tft.fillScreen(BLACK);
-  tft.setCursor(120, 25);
+  tft.setCursor(100, 25);
   tft.setTextColor(RED);
   tft.setTextSize(5);
   tft.print("Guess Mode");
-  tft.setCursor(140, 60);
+  tft.setCursor(120, 60);
   tft.setTextColor(YELLOW);
   tft.setTextSize(3);
   tft.print("Guess the Word");
@@ -515,102 +517,134 @@ void startgame(){
 
   start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
-  backhome.initButton(&tft, 390, 270, 120, 40, WHITE, BLUE, WHITE, "HOME", 4);
-  backhome.drawButton(false);
+/*   backhome.initButton(&tft, 390, 270, 120, 40, WHITE, BLUE, WHITE, "HOME", 4);
+  backhome.drawButton(false); */
 
   while(lello){
     input = firstKpd.getKey();
     input2 = secondKpd.getKey();
 
-    update_button_list(buttons);
+/*     update_button_list(buttons);
     if(buttons[5]->isPressed()){
       menu = "home";
       home();
       lello = 0;
-    }
+    } */
 
-    for (int s = 0; s < a.length(); s++) {
+/*     for (int s = 0; s < a.length(); s++) {
       if(hidden[s] == "_"){
         i = s;
       }
-    }
+    } */
     
-    if (input) {
-
-      for(int s = 0; s < hidden.length(); s++){
-        if(!hidden.charAt(s) == '_'){
-          indovinate = input;
-        }
-        if(hidden.charAt(s) == '_'){
-          hidden[s] = input;
-          tft.setCursor(20, 100);
-          tft.setTextColor(BLUE, BLACK);
-          tft.setTextSize(6);
-          tft.print(hidden);
-          i++;
-        } else{
-          i = s;
-        }
+    if(input) {
+      if(input == '='){
+        startgame();
       }
-      delay(500);
+      boolean substitutionMade = false;
+      boolean allLettersGuessed = true;
+
+      for (int s = 0; s < beforeguess.length() - 1; s++) {
+          if (beforeguess.charAt(s) == '_') {
+              allLettersGuessed = false;
+              break;
+          }
+      }
+
+      for (int s = 0; s < beforeguess.length(); s++) {
+          if (beforeguess.charAt(s) == '_') {
+              beforeguess.setCharAt(s, input);
+              i = s;
+              substitutionMade = true;
+              break;
+          }
+      }
+
+      if (allLettersGuessed && substitutionMade) {
+          i++;
+      }
+      
+      if(beforeguess == a){
+        i = a.length();
+      }
+
       tft.setCursor(20, 100);
       tft.setTextColor(BLUE, BLACK);
       tft.setTextSize(6);
-      tft.print(hidden);
-      i++;
-
+      tft.print(beforeguess);
       delay(500);
+
       if (i == a.length()) {
         flag = true;
-        if (hidden == a) {
-          tft.setCursor(50, 180);
+        if (beforeguess == a) {
+          tft.setCursor(50, 240);
           tft.setTextColor(GREEN);
           tft.setTextSize(4);
-          tft.print(a + " - WIN");
+          tft.print(a + " - WON");
           delay(1000);
           z = 0;
           lello = 0;
+          guessmode = false;
         } else {
-          tft.setCursor(50, 180);
-          tft.setTextColor(RED);
-          tft.setTextSize(4);
-          tft.print(a + " - LOST");
           delay(1000);
+          startgame();
           z = 0;
           lello = 0;
+          guessmode = false;
         }
       }
     }
 
     if (input2) {
+      boolean substitutionMade = false;
+      boolean allLettersGuessed = true;
 
-      hidden[i] = input2;
-      delay(500);
+      for (int s = 0; s < beforeguess.length() - 1; s++) {
+          if (beforeguess.charAt(s) == '_') {
+              allLettersGuessed = false;
+              break;
+          }
+      }
+
+      for (int s = 0; s < beforeguess.length(); s++) {
+          if (beforeguess.charAt(s) == '_') {
+              beforeguess.setCharAt(s, input2);
+              i = s;
+              substitutionMade = true;
+              break;
+          }
+      }
+
+      if (allLettersGuessed && substitutionMade) {
+          i++;
+      }
+      
+      if(beforeguess == a){
+        i = a.length();
+      }
+
       tft.setCursor(20, 100);
       tft.setTextColor(BLUE, BLACK);
       tft.setTextSize(6);
-      tft.print(hidden);
-      i++;
-
+      tft.print(beforeguess);
       delay(500);
+
       if (i == a.length()) {
         flag = true;
-        if (hidden == a) {
-          tft.setCursor(50, 180);
+        if (beforeguess == a) {
+          tft.setCursor(50, 240);
           tft.setTextColor(GREEN);
           tft.setTextSize(4);
-          tft.print(a + " - WIN");
+          tft.print(a + " - WON");
           delay(1000);
           z = 0;
           lello = 0;
         } else {
-          tft.setCursor(50, 180);
-          tft.setTextColor(RED);
-          tft.setTextSize(4);
-          tft.print(a + " - LOST");
           delay(1000);
+          startgame();
           z = 0;
           lello = 0;
+          guessmode = false;
         }
       }
     }
@@ -621,7 +655,7 @@ void startgame(){
 
 
   update_button_list(buttons);
-} */
+}
 
 void difficolta(){
   start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
