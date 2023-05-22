@@ -501,11 +501,15 @@ void guess(){
   guessmode = true;
   lello = 1;
   tft.fillScreen(BLACK);
-  tft.setCursor(100, 25);
+  tft.setCursor(20, 10);
+  tft.setTextColor(GREEN);
+  tft.setTextSize(4);
+  tft.print("HangMan | ");
+  tft.setCursor(250, 15);
   tft.setTextColor(RED);
-  tft.setTextSize(5);
+  tft.setTextSize(3);
   tft.print("Guess Mode");
-  tft.setCursor(120, 60);
+  tft.setCursor(20, 50);
   tft.setTextColor(YELLOW);
   tft.setTextSize(3);
   tft.print("Guess the Word");
