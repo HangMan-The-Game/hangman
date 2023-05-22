@@ -564,8 +564,8 @@ void guess(){
           i++;
       }
       
-      if(beforeguess == a){
-        i = a.length();
+      if (beforeguess.indexOf('_') == -1) {
+          i = hidden.length();
       }
 
       tft.setCursor(20, 100);
@@ -581,6 +581,7 @@ void guess(){
           tft.setTextColor(GREEN);
           tft.setTextSize(4);
           tft.print(a + " - WON");
+          hidden = a;
           delay(1000);
           z = 0;
           lello = 0;
@@ -619,10 +620,10 @@ void guess(){
           i++;
       }
       
-      if(beforeguess == a){
-        i = a.length();
+      if (beforeguess.indexOf('_') == -1) {
+          i = hidden.length();
       }
-
+      
       tft.setCursor(20, 100);
       tft.setTextColor(BLUE, BLACK);
       tft.setTextSize(6);
@@ -636,6 +637,7 @@ void guess(){
           tft.setTextColor(GREEN);
           tft.setTextSize(4);
           tft.print(a + " - WON");
+          hidden = a;
           delay(1000);
           z = 0;
           lello = 0;
