@@ -68,11 +68,18 @@ String d [] = {
 };
 
 String a = ""; //parola da indovinare
+String consiglio = ""; // consiglio da indovinare
+String parolaRicevuta = "", consiglioRicevuto = "";
 int nword = 50, randomized = 0;
 String hidden = "", wrong = "", beforeguess = "";
 String prendi;
 int i = 0, tent = 6, generated = 0, z = 0, g = 0, y = 0, scelta = 1, lello = 0, mamma = 0, tenterrato = 0;
 bool flag = false, guessed = false, guessmode = false, guessmodewrong = false;
+
+bool nuoveStringheDisponibili = false;
+
+unsigned long previousMillis = 0;
+const unsigned long interval = 1500;
 
 //BUZZ SECTION
 
@@ -172,7 +179,11 @@ void loop() {
     }
     if(buttons[0]->isPressed()){
       menu = "start";
-      startgame();
+      if (!parolaRicevuta.length() == 0 && !consiglioRicevuto.length() == 0){
+        startgame();
+        parolaRicevuta = "";
+        consiglioRicevuto = "";
+      }
     }
     if(buttons[1]->isPressed()){
       menu = "diff";
@@ -198,8 +209,90 @@ void loop() {
       versus();
     }
   }
-  Serial.println(menu + " mode: " + mode);
-  Serial.println(a + " | " + generated + " - scelta: " + mode);
+
+
+    // Serial.println("yo millis");
+
+    /* while (Serial1.available()) {
+      Serial1.read();
+    } */
+
+    if (Serial1.available() > 0) {
+      String receivedString = Serial1.readStringUntil('\n');
+      receivedString.trim();
+      // Serial.println(receivedString);
+      if (parolaRicevuta.length() == 0) {
+        parolaRicevuta = receivedString;
+      } else if (consiglioRicevuto.length() == 0) {
+        consiglioRicevuto = receivedString;
+        Serial.println("Parola Ricevuta: " + parolaRicevuta);
+        Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+        nuoveStringheDisponibili = true;
+
+        /* parolaRicevuta = "";
+        consiglioRicevuto = ""; */
+      }
+    }
+  
+
+
+  /* if (Serial1.available() > 0) {
+    String receivedString = Serial1.readStringUntil('\n');
+    receivedString.trim();
+    if (parolaRicevuta.length() == 0) {
+      parolaRicevuta = receivedString;
+    } else if (consiglioRicevuto.length() == 0) {
+      consiglioRicevuto = receivedString;
+      Serial.println("Parola Ricevuta: " + parolaRicevuta);
+      Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+      nuoveStringheDisponibili = true;
+    }
+  } */
+
+/*   static String buffer = "";
+
+  while (Serial1.available() > 0) {
+    char c = Serial1.read();
+    if (c == '\n') {
+      buffer.trim();
+      if (parolaRicevuta.length() > 0) {
+        if (consiglioRicevuto.length() == 0) {
+          consiglioRicevuto = buffer;
+          Serial.println("Parola Ricevuta: " + parolaRicevuta);
+          Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+          nuoveStringheDisponibili = true;
+        }
+      } else {
+        parolaRicevuta = buffer;
+      }
+      buffer = "";
+    } else {
+      buffer += c;
+    }
+  } */
+
+/*   if (Serial1.available() > 0) {
+    String ricevuto = Serial1.readStringUntil('\n');
+    ricevuto.trim();
+    
+    Serial.println("Ricevuto: [" + ricevuto + "]");
+
+    int pos = ricevuto.lastIndexOf('\n');
+    Serial.println("Posizione del carattere '\\n': " + String(pos));
+
+    if (pos != -1) {
+      parolaRicevuta = ricevuto.substring(0, pos);
+      consiglioRicevuto = ricevuto.substring(pos + 1);
+      
+      Serial.println("Parola Ricevuta: " + parolaRicevuta);
+      Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+
+      nuoveStringheDisponibili = true;
+    }
+  } */
+
+  /* Serial.println(menu + " mode: " + mode);
+  Serial.println(a + " | " + generated + " - scelta: " + mode); */
 }
 
 void home(){
@@ -243,11 +336,11 @@ void home(){
 }
 
 void startgame(){
+  Serial.println(a + " " + consiglio);
   while (z == 0) {
     Serial.println("RESET");
     tent = 6;
     tenterrato = 0;
-    Serial1.println("9");
     hidden = "";
     wrong = "";
     lello = 1;
@@ -256,7 +349,12 @@ void startgame(){
     switch(mode){
       case 1:
         // a = "BICICLETTA";
-        a = b[generated];
+        if (nuoveStringheDisponibili) {
+          a = parolaRicevuta; 
+          consiglio = consiglioRicevuto; 
+          nuoveStringheDisponibili = false;
+        }
+        // a = b[generated];
         //a = "CIAQ";
         ndiff = "Easy";
         break;
@@ -303,6 +401,11 @@ void startgame(){
   tft.setTextColor(BLUE);
   tft.setTextSize(6);
   tft.print(hidden);
+
+  tft.setCursor(20, 250);
+  tft.setTextColor(WHITE);
+  tft.setTextSize(2);
+  tft.print(consiglio);
 
   start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
@@ -353,10 +456,10 @@ void startgame(){
             is_wrong = true;
           } else{
               wrong += input;
-              Serial1.println(tent);
+              // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
-                Serial1.println(tent);
+                // Serial1.println(tent);
                 tone(speakerPin, 500);
                 delay(1000);
                 noTone(speakerPin);
@@ -458,10 +561,10 @@ void startgame(){
               break;
             }else{
               wrong += input2;
-              Serial1.println(tent);
+              // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
-                Serial1.println(tent);
+                // Serial1.println(tent);
                 tone(speakerPin, 500);
                 delay(1000);
                 noTone(speakerPin);
@@ -588,7 +691,7 @@ void versus(){
   while (z == 0) {
     Serial.println("RESET");
     tent = 6;
-    Serial1.println("9");
+    // Serial1.println("9");
     hidden = "";
     wrong = "";
     lello = 1;
@@ -663,10 +766,10 @@ void versus(){
             is_wrong = true;
           } else{
               wrong += input;
-              Serial1.println(tent);
+              // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
-                Serial1.println(tent);
+                // Serial1.println(tent);
                 tone(speakerPin, 500);
                 delay(1000);
                 noTone(speakerPin);
@@ -768,10 +871,10 @@ void versus(){
               break;
             }else{
               wrong += input2;
-              Serial1.println(tent);
+              // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
-                Serial1.println(tent);
+                // Serial1.println(tent);
                 tone(speakerPin, 500);
                 delay(1000);
                 noTone(speakerPin);
