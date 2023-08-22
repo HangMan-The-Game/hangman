@@ -1,0 +1,72 @@
+ABBUFFATA: Mangiare eccessivamente
+ANGUILLOSO: Simile all'anguilla.
+CICALECCIO: Chiacchiericcio.
+COCCIUTAGGINI: Testardi piccoli.
+DISCORDANTE: Non armonioso.
+ELETTROLISI: Decomposizione elettrica.
+EQUANIMITÀ: Calma.
+ERMELLINO: Animale con pelo prezioso.
+FILOLOGIA: Studio di testi.
+FRANGENTE: Momento preciso.
+GHIRLANDA: Decorazione natalizia.
+GIUNCATA: Materiale intrecciato.
+IMBRACATURA: Attrezzatura anti-infortunio.
+IMPRONTE: Segni di scarpe.
+INCANDESCENZA: Luce calda.
+INFRANGIBILE: Indistruttibile.
+LAMPADOFORA: Portacandela antico.
+LATRATO: Abbaio.
+MANGANELLO: Oggetto per colpire.
+MORFEMICO: Blocchi linguistici.
+NEVRALGIA: Dolore nervoso.
+NINNA NANNA: Canzone da culla.
+OLOCAUSTO: 27 Gennaio.
+PARMENIDE: Filosofo greco.
+PENTAFONO: Strumento a fiato.
+PIPISTRELLO: Mammifero notturno.
+RECONDITO: Nascosto.
+RIGOGOLO: Uccello canterino.
+SCARTABELLO: Tavolo smistatore.
+SMAGLIATURA: Difetto di verniciatura.
+SOTTERRANEO: Sotto terra.
+SPIRAGLIO: Apertura piccola.
+STRALLARE: Far rumore.
+STRIDULO: Suono acuto.
+SUBLIME: Grandioso.
+ACULEO: Oggetto pungente.
+LAPSUS: Errore verbale.
+ALLUVIONE: Flusso d'acqua.
+BISBIGLIO: Sussurro leggero.
+BLASFEMO: Irriverente al sacro.
+CAMALEONTE: Animale che cambia colore.
+CANAGLIA: Disonesto.
+SCRUTINIO: Esame dettagliato.
+CAPILLARE: Molto sottile.
+CAPRICCIOSO: Instabile.
+BACKUP: Copia sicurezza.
+PASSWORD: Codice segreto.
+UGUAGLIANZA: Parità.
+ECO: Suono riflesso.
+EGOISMO: Preoccuparsi di sé.
+ELEGANTE: Raffinato.
+ELOGIO: Lode.
+EMBRIONE: Stadio iniziale.
+EMPATIA: Comprendere altrui.
+ENCEFALO: Parte cervello.
+ENIGMA: Mistero.
+DISTINTIVO: Simbolo.
+LEGGENDA: Racconto antico.
+MIRACOLOSO: Straordinario.
+MISTICO: Spirituale.
+TRASCENDENTE: Oltre limiti.
+UMANITÀ: Razza umana.
+RASTRELLO: Strumento raccolta.
+INTERFONO: Comunicazione.
+MUTUO: Prestito casa.
+DISPENSER: Distributore.
+PROFETA: Messaggero divino.
+RIDONDANTE: Eccessivo.
+MONARCA: Sovrano.
+MONETIZZARE: Trasformare in denaro.
+SISTEMATICO: Organizzato.
+DISTILLATORE: Apparecchio distillazione.
