@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="module">
+        import { app, analytics } from "./config.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-database.js";
+
+        const database = getDatabase();
+        const datiParola = ref(database, 'Facile/Parole');
+
+        const Parole = ["CIAO", "BELLO"];
+
+        for (let i = 0; i < Parole.length; i++) {
+            const idNumerico = (i + 1).toString();
+            const parolaRef = ref(database, `Facile/Parole/${idNumerico}`);
+            set(parolaRef, Parole[i]);
+        }
+    </script>
+</body>
+
+</html>
