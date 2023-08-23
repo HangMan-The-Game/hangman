@@ -1,0 +1,32 @@
+parole = [
+    "ABBUFFATA", "ANGUILLOSO", "CICALECCIO", "COCCIUTAGGINE", "DISCORDANTE",
+    "ELETTROLISI", "EQUANIMITÀ", "ERMELLINO", "FILOLOGIA", "FRANGENTE",
+    "GHIRLANDA", "GIUNCATA", "IMBRACATURA", "IMPRONTE", "INCANDESCENZA",
+    "INFRANGIBILE", "LAMPADOFORA", "LATRATO", "MANGANELLO", "MORFEMICO",
+    "NEVRALGIA", "OLOCAUSTO", "PARMENIDE", "PENTAFONO",
+    "PIPISTRELLO", "RECONDITO", "RIGOGOLO", "SCARTABELLO", "SMAGLIATURA",
+    "SOTTERRANEO", "SPIRAGLIO", "STRALLARE", "STRIDULO", "SUBLIME", "ACULEO",
+    "LAPSUS", "ALLUVIONE", "BISBIGLIO", "BLASFEMO", "CAMALEONTE", "CANAGLIA",
+    "SCRUTINIO", "CAPILLARE", "CAPRICCIOSO", "BACKUP", "PASSWORD", "UGUAGLIANZA",
+    "ECO", "EGOISMO", "ELEGANTE", "ELOGIO", "EMBRIONE", "EMPATIA", "ENCEFALO",
+    "ENIGMA", "DISTINTIVO", "LEGGENDA", "MIRACOLOSO", "MISTICO", "TRASCENDENTE",
+    "UMANITÀ", "RASTRELLO", "INTERFONO", "MUTUO", "DISPENSER", "PROFETA",
+    "RIDONDANTE", "MONARCA", "MONETIZZARE", "SISTEMATICO", "DISTILLATORE"
+]
+
+definizioni = [
+    "Mangiare eccessivamente", "Simile all'anguilla", "Chiacchiericcio", "Atteggiamento da testardo", "Non armonioso",
+    "Decomposizione elettrica", "Calma", "Animale con pelo prezioso", "Studio di testi", "Momento preciso",
+    "Decorazione natalizia", "Materiale intrecciato", "Attrezzatura anti-infortunio", "Segni di scarpe sulla neve", "Luce calda",
+    "Indistruttibile", "Portacandela antico", "Abbaio", "Oggetto per colpire utilizzato dalla polizia", "Blocchi linguistici",
+    "Dolore nervoso", "27 Gennaio", "Filosofo greco", "Strumento a fiato",
+    "Mammifero notturno", "Nascosto", "Uccello canterino", "Tavolo smistatore", "Difetto di verniciatura",
+    "Sotto terra", "Apertura piccola", "Far rumore", "Suono acuto", "Grandioso", "Oggetto pungente",
+    "Errore verbale", "Flusso d'acqua", "Sussurro leggero", "Irriverente al sacro", "Animale che cambia colore", "Disonesto",
+    "Esame dettagliato", "Molto sottile", "Instabile", "Copia sicurezza", "Codice segreto", "Parita'",
+    "Suono riflesso", "Preoccuparsi di sé", "Raffinato", "Lode", "Stadio iniziale", "Comprendere altrui", "Parte cervello",
+    "Mistero", "Simbolo", "Racconto antico", "Straordinario", "Spirituale", "Oltre limiti", "Razza umana",
+    "Strumento raccolta", "Comunicazione", "Prestito per la casa", "Distributore", "Messaggero divino", "Eccessivo",
+    "Sovrano", "Trasformare in denaro", "Organizzato", "Apparecchio distillazione"
+]
+
