@@ -194,6 +194,9 @@ void loop() {
     }
     if(buttons[3]->isPressed()){
       mode = 2;
+
+      Serial.println("Parola Ricevuta: " + parolaRicevuta);
+      Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
     }
     if(buttons[4]->isPressed()){
       mode = 3;
@@ -337,6 +340,8 @@ void home(){
 
 void startgame(){
   Serial.println(a + " " + consiglio);
+  Serial.println("Parola Ricevuta: " + parolaRicevuta);
+  Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
   while (z == 0) {
     Serial.println("RESET");
     tent = 6;
@@ -359,12 +364,22 @@ void startgame(){
         ndiff = "Easy";
         break;
       case 2:
-        a = c[generated];
+        if (nuoveStringheDisponibili) {
+          a = parolaRicevuta; 
+          consiglio = consiglioRicevuto; 
+          nuoveStringheDisponibili = false;
+        }
+        // a = c[generated];
         //a = "CIAB";
         ndiff = "Medium";
         break;
       case 3:
-        a = d[generated];
+        if (nuoveStringheDisponibili) {
+          a = parolaRicevuta; 
+          consiglio = consiglioRicevuto; 
+          nuoveStringheDisponibili = false;
+        }
+        // a = d[generated];
         //a = "CIIAJ";
         ndiff = "Hard";
         break;
@@ -401,13 +416,6 @@ void startgame(){
   tft.setTextColor(BLUE);
   tft.setTextSize(6);
   tft.print(hidden);
-
-  if(mode >= 2){
-    tft.setCursor(20, 250);
-    tft.setTextColor(WHITE);
-    tft.setTextSize(2);
-    tft.print(consiglio);
-  }
 
   start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
@@ -462,7 +470,14 @@ void startgame(){
               if (h == a.length()) {
                 tent--;
 
-                if((mode = 1) && (tent == 2)){
+                if(((mode == 2) || (mode == 3)) && (tent == 2)){
+                  tft.setCursor(20, 250);
+                  tft.setTextColor(WHITE);
+                  tft.setTextSize(2);
+                  tft.print(consiglio);
+                }
+
+                if((mode == 1) && (tent == 2)){
 
                   int lunghezzaPar = a.length();
                   int randomico = random(lunghezzaPar);
@@ -595,7 +610,14 @@ void startgame(){
               if (h == a.length()) {
                 tent--;
 
-                if((mode = 1) && (tent == 2)){
+                if(((mode == 2) || (mode == 3)) && (tent == 3)){
+                  tft.setCursor(20, 250);
+                  tft.setTextColor(WHITE);
+                  tft.setTextSize(2);
+                  tft.print(consiglio);
+                }
+
+                if((mode == 1) && (tent == 2)){
 
                   int lunghezzaPar = a.length();
                   int randomico = random(lunghezzaPar);
