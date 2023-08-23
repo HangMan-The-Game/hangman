@@ -1,30 +1,30 @@
-words = [   
+words = [ 
      "BINGE", "EELY", "CHATTER", "STUBBORNNESS", "DISCORDANT", "ELECTROLYSIS", 
-     "EQUANIMITY", "ERMINE", "PHILOLOGY", "JUNCTURE",    "GARLAND", "CURDS", "HARNESS", 
-     "FOOTPRINTS", "INCANDESCENCE",    "UNBREAKABLE", "LAMPLIGHTER", "BARK", "BATON", 
-     "MORPHEMIC",    "NEURALGIA", "HOLOCAUST", "PARMENIDES", "PENTAPHONE",    
-     "BAT", "HIDDEN", "LARK", "SCRATCHPAD", "SNAG",    "UNDERGROUND", "GAP", "SWAY", 
-     "SHRILL", "SUBLIME", "SPINE",    "LAPSUS", "FLOOD", "WHISPER", "BLASPHEMOUS", 
-     "CHAMELEON", "SCOUNDREL",    "SCRUTINY", "CAPILLARY", "CAPRICIOUS", "BACKUP", 
-     "PASSWORD", "EQUALITY",    "ECHO", "SELFISHNESS", "ELEGANT", "PRAISE", "EMBRYO", 
-     "EMPATHY", "BRAIN",    "ENIGMA", "BADGE", "LEGEND", "MIRACULOUS", "MYSTICAL", 
-     "TRANSCENDENT",    "HUMANITY", "RAKE", "INTERCOM", "MORTGAGE", "DISPENSER", "PROPHET",    
+     "EQUANIMITY", "ERMINE", "PHILOLOGY", "JUNCTURE", "GARLAND", "CURDS", "HARNESS", 
+     "FOOTPRINTS", "INCANDESCENCE", "UNBREAKABLE", "LAMPLIGHTER", "BARK", "BATON", 
+     "MORPHEMIC", "NEURALGIA", "HOLOCAUST", "PARMENIDES", "PENTAPHONE",
+     "BAT", "HIDDEN", "LARK", "SCRATCHPAD", "SNAG", "UNDERGROUND", "GAP", "SWAY", 
+     "SHRILL", "SUBLIME", "SPINE", "LAPSUS", "FLOOD", "WHISPER", "BLASPHEMOUS", 
+     "CHAMELEON", "SCOUNDREL", "SCRUTINY", "CAPILLARY", "CAPRICIOUS", "BACKUP", 
+     "PASSWORD", "EQUALITY", "ECHO", "SELFISHNESS", "ELEGANT", "PRAISE", "EMBRYO", 
+     "EMPATHY", "BRAIN", "ENIGMA", "BADGE", "LEGEND", "MIRACULOUS", "MYSTICAL", 
+     "TRANSCENDENT", "HUMANITY", "RAKE", "INTERCOM", "MORTGAGE", "DISPENSER", "PROPHET",
      "REDUNDANT", "MONARCH", "MONETIZE", "SYSTEMATIC", "DISTILLER"]
 
 
-definitions = [    
-    "Overeating", "Eel-like", "Idle talk", "Stubborn attitude", "Not harmonious",    
-    "Electrical decomposition", "Calmness", "Animal with valuable fur", "Study of texts", 
-    "Precise moment",    "Christmas decoration", "Braided material", "Safety equipment", 
-    "Shoe marks in the snow", "Warm light",    "Indestructible", "Ancient candle holder", 
-    "Barking", "Object used by police to hit", "Linguistic blocks",    "Nerve pain", 
-    "January 27th", "Greek philosopher", "Wind instrument",    "Nocturnal mammal", "Hidden", 
-    "Singing bird", "Sorting table", "Painting defect",    "Underground", "Small opening", 
-    "Make noise", "High-pitched sound", "Magnificent", "Pointed object",    "Verbal mistake",
-    "Water flow", "Light whisper", "Irreverent to the sacred", "Color-changing animal", "Dishonest",    
-    "Detailed examination", "Very thin", "Unstable", "Safety copy", "Secret code", "Equality",    
-    "Reflected sound", "Self-concern", "Refined", "Praise", "Initial stage", "Understanding others", 
-    "Brain part",    "Mystery", "Symbol", "Ancient tale", "Extraordinary", "Spiritual", "Beyond limits", 
-    "Human race",    "Gathering tool", "Communication device", "Home loan", "Dispenser", "Divine messenger", 
-    "Excessive",    "Ruler", "Turn into money", "Organized", "Distillation apparatus"]
+definitions = [
+     "Overeating", "Eel-like", "Idle talk", "Stubborn attitude", "Not harmonious",
+     "Electrical decomposition", "Calmness", "Animal with valuable fur", "Study of texts", 
+     "Precise moment", "Christmas decoration", "Braided material", "Safety equipment", 
+     "Shoe marks in the snow", "Warm light", "Indestructible", "Ancient candle holder", 
+     "Barking", "Object used by police to hit", "Linguistic blocks", "Nerve pain", 
+     "January 27th", "Greek philosopher", "Wind instrument", "Nocturnal mammal", "Hidden", 
+     "Singing bird", "Sorting table", "Painting defect", "Underground", "Small opening", 
+     "Make noise", "High-pitched sound", "Magnificent", "Pointed object", "Verbal mistake",
+     "Water flow", "Light whisper", "Irreverent to the sacred", "Color-changing animal", "Dishonest",
+     "Detailed examination", "Very thin", "Unstable", "Safety copy", "Secret code", "Equality",
+     "Reflected sound", "Self-concern", "Refined", "Praise", "Initial stage", "Understanding others", 
+     "Brain part", "Mystery", "Symbol", "Ancient tale", "Extraordinary", "Spiritual", "Beyond limits", 
+     "Human race", "Gathering tool", "Communication device", "Home loan", "Dispenser", "Divine messenger", 
+     "Excessive", "Ruler", "Turn into money", "Organized", "Distillation apparatus"]
 
