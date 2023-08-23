@@ -402,10 +402,12 @@ void startgame(){
   tft.setTextSize(6);
   tft.print(hidden);
 
-  tft.setCursor(20, 250);
-  tft.setTextColor(WHITE);
-  tft.setTextSize(2);
-  tft.print(consiglio);
+  if(mode >= 2){
+    tft.setCursor(20, 250);
+    tft.setTextColor(WHITE);
+    tft.setTextSize(2);
+    tft.print(consiglio);
+  }
 
   start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
@@ -459,6 +461,34 @@ void startgame(){
               // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
+
+                if((mode = 1) && (tent == 2)){
+
+                  int lunghezzaPar = a.length();
+                  int randomico = random(lunghezzaPar);
+                  char lettPresa;
+                  int lettCont = 0;
+
+                  Serial.println("Lunghezza " + String(lunghezzaPar));
+                  Serial.println("Random " + String(randomico));
+
+                  char letteraDaSostituire = a[randomico];
+                  bool sostituita = false;
+              
+                  for (int c = 0; c < lunghezzaPar; c++) {
+                    if (letteraDaSostituire == a[c] && hidden[c] == '_') {
+                      hidden[c] = letteraDaSostituire;
+                      sostituita = true;
+                    }
+                  }
+
+                  if (!sostituita) {
+                    hidden[randomico] = letteraDaSostituire;
+                  }
+
+                  // hidden[randomico] = a[randomico];
+                }
+                
                 // Serial1.println(tent);
                 tone(speakerPin, 500);
                 delay(1000);
@@ -564,6 +594,34 @@ void startgame(){
               // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
+
+                if((mode = 1) && (tent == 2)){
+
+                  int lunghezzaPar = a.length();
+                  int randomico = random(lunghezzaPar);
+                  char lettPresa;
+                  int lettCont = 0;
+
+                  Serial.println("Lunghezza " + String(lunghezzaPar));
+                  Serial.println("Random " + String(randomico));
+
+                  char letteraDaSostituire = a[randomico];
+                  bool sostituita = false;
+              
+                  for (int c = 0; c < lunghezzaPar; c++) {
+                    if (letteraDaSostituire == a[c] && hidden[c] == '_') {
+                      hidden[c] = letteraDaSostituire;
+                      sostituita = true;
+                    }
+                  }
+
+                  if (!sostituita) {
+                    hidden[randomico] = letteraDaSostituire;
+                  }
+
+                  // hidden[randomico] = a[randomico];
+                }
+
                 // Serial1.println(tent);
                 tone(speakerPin, 500);
                 delay(1000);
