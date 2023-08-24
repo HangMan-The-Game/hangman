@@ -190,15 +190,24 @@ void loop() {
     }
     if(buttons[2]->isPressed()){
       mode = 1;
+
+      Serial1.println("1"); 
     }
     if(buttons[3]->isPressed()){
       mode = 2;
 
-      Serial.println("Parola Ricevuta: " + parolaRicevuta);
-      Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+      Serial1.println("2"); 
+
+      Serial.println("Parola Med: " + parolaRicevuta);
+      Serial.println("Consiglio Med: " + consiglioRicevuto);
     }
     if(buttons[4]->isPressed()){
       mode = 3;
+
+      Serial1.println("3"); 
+
+      Serial.println("Parola Diff: " + parolaRicevuta);
+      Serial.println("Consiglio Diff: " + consiglioRicevuto);
     }
     if(buttons[5]->isPressed()){
       menu = "home";
@@ -211,14 +220,6 @@ void loop() {
       versus();
     }
   }
-
-
-    // Serial.println("yo millis");
-
-    /* while (Serial1.available()) {
-      Serial1.read();
-    } */
-
     if (Serial1.available() > 0) {
       String receivedString = Serial1.readStringUntil('\n');
       receivedString.trim();
@@ -235,63 +236,6 @@ void loop() {
         consiglioRicevuto = ""; */
       }
     }
-  
-
-
-  /* if (Serial1.available() > 0) {
-    String receivedString = Serial1.readStringUntil('\n');
-    receivedString.trim();
-    if (parolaRicevuta.length() == 0) {
-      parolaRicevuta = receivedString;
-    } else if (consiglioRicevuto.length() == 0) {
-      consiglioRicevuto = receivedString;
-      Serial.println("Parola Ricevuta: " + parolaRicevuta);
-      Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
-      nuoveStringheDisponibili = true;
-    }
-  } */
-
-/*   static String buffer = "";
-
-  while (Serial1.available() > 0) {
-    char c = Serial1.read();
-    if (c == '\n') {
-      buffer.trim();
-      if (parolaRicevuta.length() > 0) {
-        if (consiglioRicevuto.length() == 0) {
-          consiglioRicevuto = buffer;
-          Serial.println("Parola Ricevuta: " + parolaRicevuta);
-          Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
-          nuoveStringheDisponibili = true;
-        }
-      } else {
-        parolaRicevuta = buffer;
-      }
-      buffer = "";
-    } else {
-      buffer += c;
-    }
-  } */
-
-/*   if (Serial1.available() > 0) {
-    String ricevuto = Serial1.readStringUntil('\n');
-    ricevuto.trim();
-    
-    Serial.println("Ricevuto: [" + ricevuto + "]");
-
-    int pos = ricevuto.lastIndexOf('\n');
-    Serial.println("Posizione del carattere '\\n': " + String(pos));
-
-    if (pos != -1) {
-      parolaRicevuta = ricevuto.substring(0, pos);
-      consiglioRicevuto = ricevuto.substring(pos + 1);
-      
-      Serial.println("Parola Ricevuta: " + parolaRicevuta);
-      Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
-
-      nuoveStringheDisponibili = true;
-    }
-  } */
 
   /* Serial.println(menu + " mode: " + mode);
   Serial.println(a + " | " + generated + " - scelta: " + mode); */
@@ -325,6 +269,27 @@ void home(){
   start.drawButton(false);
   diff.drawButton(false);
   vs.drawButton(false);
+
+  parolaRicevuta = "";
+  consiglioRicevuto = "";
+
+  if (Serial1.available() > 0) {
+    String receivedString = Serial1.readStringUntil('\n');
+    receivedString.trim();
+    // Serial.println(receivedString);
+    if (parolaRicevuta.length() == 0) {
+      parolaRicevuta = receivedString;
+    } else if (consiglioRicevuto.length() == 0) {
+      consiglioRicevuto = receivedString;
+      Serial.println("Parola Ricevuta: " + parolaRicevuta);
+      Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+      nuoveStringheDisponibili = true;
+
+      /* parolaRicevuta = "";
+      consiglioRicevuto = ""; */
+    }
+  }
+
   update_button_list(buttons);  //use helper function
   for (int i = 0; buttons[i] != NULL; i++) {
     if (buttons[i]->isPressed()) {
@@ -469,8 +434,8 @@ void startgame(){
               if (h == a.length()) {
                 tent--;
 
-                if(((mode == 2) || (mode == 3)) && (tent == 2)){
-                  tft.setCursor(20, 250);
+                if(((mode == 2) || (mode == 3)) && (tent == 3)){
+                  tft.setCursor(20, 230);
                   tft.setTextColor(WHITE);
                   tft.setTextSize(2);
                   tft.print(consiglio);
@@ -611,9 +576,9 @@ void startgame(){
               // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
-
+                
                 if(((mode == 2) || (mode == 3)) && (tent == 3)){
-                  tft.setCursor(20, 250);
+                  tft.setCursor(20, 230);
                   tft.setTextColor(WHITE);
                   tft.setTextSize(2);
                   tft.print(consiglio);
