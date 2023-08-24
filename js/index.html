@@ -16,73 +16,43 @@
         const datiParola = ref(database, 'Facile/Parole');
         const datiConsigli = ref(database, 'Facile/Consigli');
 
-        const Parole = ["ACQUA", "AUTO", "ASTUCCIO", "ASPIRAPOLVERE", "APE", "BICICLETTA", "BOTTIGLIA", "BATTERIA",
-            "BIGLIETTO", "PORTAFOGLIO", "COMPUTER", "CUFFIE", "CANE", "CAMICIA", "CHIAVE", "CANDELA",
-            "DIARIO", "DOLCI", "ERRORE", "FRIGORIFERO", "FELPA", "FORNO", "FOTO", "GATTO", "GIORNALE",
-            "GOMMA", "GIACCA", "GELATO", "GIOIELLI", "HOT-DOG", "HOTEL", "IPPOPOTAMO", "IMBUTO", "JEANS",
-            "KETCHUP", "MAIONESE", "LIBRO", "LETTO", "LATTINA", "LUCCHETTO", "FOTOCAMERA", "MAGLIETTA",
-            "CANOTTIERA", "BARCA", "MATITA", "MOUSE", "MELA", "MACCHINA", "NASTRO", "NUVOLA", "NAVE",
-            "OROLOGIO", "OMBRELLO", "OLIO", "MOTO", "OCCHIALI", "PALLA", "DENTI", "BRACCIO", "MANO",
-            "CAPELLI", "PANTALONI", "PASSEGGINO", "PIUMONE", "QUADERNO", "QUADRO", "QUOTIDIANO", "RASOIO",
-            "RADIO", "RETE", "SMARTPHONE", "SCARPE", "SEDIA", "SAPONE", "SPAZZOLINO", "TASTIERA", "TAZZA",
-            "UOVO", "UVA", "VINO", "VIDEOCAMERA", "ZUCCHERO", "GATTO", "LEONE", "ORSO", "SCIMMIA", "SERPENTE",
-            "TIGRE", "ZEBRA", "AMORE", "BANANA", "DADO", "FARFALLA", "INVERNO", "LUNA", "MARE", "OMBRELLO",
-            "SOLE", "GIALLO", "ROSSO", "VERDE", "ALBERO", "PIZZA", "CARBONARA", "DOLCE", "SALATO", "CREPES",
-            "ANTIPASTO", "PRANZO", "CENA", "SPINACI", "BARCELLONA", "FIRENZE", "MADRID", "NAPOLI", "ROMA",
-            "TOKYO", "VENEZIA", "NEW YORK", "LONDRA", "MILANO", "TORINO", "PALERMO", "GIUBBOTTO", "ANELLO",
-            "COLLANA", "BRACCIALE", "ORECCHINI", "POMODORO", "PROFESSORE", "CASALINGA", "PRETE", "TELEVSIONE",
-            "TELECOMANDO", "BIDONE", "LAVANDINO", "CIELO", "STELLE", "PIANETA", "TERRA", "MERCURIO", "GIOVE",
-            "FIORI", "ROSA", "MARGHERITA", "PASTA", "PENNA", "MATITA", "WHATSAPP", "SPECCHIO", "CASCO", "ZAINO",
-            "AEREO", "ELICOTTERO", "OSPEDALE", "BAR", "POLIZIA", "POMPIERE", "MEDICO", "CUOCO", "AVVOCATO",
-            "GIUDICE", "CHIESA", "VULCANO", "BAMBOLA", "CASTELLO", "SABBIA", "ARMADIO", "SCUOLA", "VASO",
-            "FONTANA", "CASA", "CAFFE", "GRATTACIELO", "GIRAFFA", "ELEFANTE"];
-        const Consigli = ["Bevanda quotidiana", "Mezzo di trasporto", "Contenitore di cancelleria", "Per rimuovere polvere", "Animale che produce miele",
-            "Veicolo a due ruote", "Contenitore per liquidi", "Strumento musicale", "Per l'autobus", "Custodia contenente denaro e documenti",
-            "Calcolatore elettronico", "Per ascoltare musica", "Animale domestico", "Capo elegante", "Per aprire le serrature",
-            "Di cera, profumata", "Segreto o scolastico", "A fine pasto", "Sbaglio", "Conserva il cibo",
-            "Con cappuccio", "Per cuocere", "Ricordo digitale", "Felino domestico", "Per notizie",
-            "Per cancellare", "Capo esterno", "Cibo estivo", "Accessori preziosi", "Sandwich con wurstel",
-            "Alloggio in vacanza", "Animale grande", "Per versare liquidi", "Pantaloni", "Salsa rossa",
-            "Salsa bianca all'uovo", "Lo usi per studiare e per imparare", "Dove dormi", "Contenitore metallico", "Serve per chiudere qualcosa",
-            "Serve per fare le foto", "T-shirt", "Senza maniche", "Veicolo marittimo", "Utensile da scrivere",
-            "Topo o periferica", "Frutto", "Mezzo di trasporto", "Adesivo", "Nel cielo",
-            "Grossa barca", "Mostra l'ora", "Contro pioggia", "Condimento", "Veicolo a due ruote",
-            "Per vedere", "La usi spesso negli sport", "Sono 32", "Arto umano", "Parte finale braccio",
-            "Sul capo", "Capo inferiore", "Per bambini", "Coperta pesante", "Per appunti",
-            "Opera d'arte", "Giornaliero", "Per barba", "Per musica", "Internet o pesca",
-            "Elettronico moderno", "Calzature", "Mobiliario", "Serve per piulire le mani", "Serve per l'igiene orale",
-            "Periferica PC", "Per bere", "Lo fa la gallina", "Frutto", "Beverage",
-            "Per fare dei filmati", "Dolcificante", "Felino domestico", "Re degli animali", "Animale polare o bruno",
-            "Mangia banane", "Rettile", "Grande felino", "Animale a strisce", "Sentimento",
-            "Frutto", "6 facce", "Insetto volante", "Stagione fredda", "Satellite terrestre",
-            "Estensione acqua", "Protegge dallacpioggia", "Astro", "Colore del sole", "Colore del sangue",
-            "Colore della natura", "Vegetazione", "Piatto italiano", "Piatto tipico romano", "Contrario di dolce",
-            "Contrario di salato", "Dolce francese", "Primo piatto", "Pasto del mezzogiorno", "Pasto serale",
-            "Verdura", "Citta' della Sagrada Familia", "Citta' natale di Dante", "Capitale della Spagna", "Citta' della pizza",
-            "Capitale Italia", "Capitale del Giappone", "Citta' della gondole", "La grande mela", "Capitale del UK",
-            "Copoluogo della Lombardia", "Capoluogo del Piemonte", "Capoluogo della Sicilia", "Capo invernale", "Gioiello",
-            "Gioiello", "Gioiello", "Accessori orecchio", "Condimento", "Insegnante universitario",
-            "Lavora in casa", "Religioso", "Dispositivo elettronico utilizzato per guardare i film", "Lo usi per cambiare canale della TV", "Contenitore d'immondizia",
-            "Per igiene", "Sopra", "Nel cielo notturno", "Spazio celeste", "Pianeta abitato",
-            "Pianeta piu' vicino alla terra", "Il pianeta piu' grande", "Natura fiorita", "Fiore", "Fiore o pizza",
-            "Cibo italiano", "Utensile inchiostro", "Utensile grafite", "App messaggi", "Riflette immagine",
-            "Protezione testa", "Accessorio scuola", "Mezzo aereo", "Veicolo con eliche", "Luogo dove curarsi",
-            "Locale bevande", "Forze dell'ordine", "Li chiami per gli incendi", "Professione sanitaria", "Cucina ristoranti",
-            "Difesa legale", "Decisioni legali", "Edificio religioso", "Lo sono l'Etna, il vesuvio", "Lo sono Barbie e Ken",
-            "Dove abitavano i reali", "Su litorale", "Conserva abiti", "Istituzione", "Contenitore fiori",
-            "di Trevi", "Abitazione", "Lo puopi prendere amaro o dolce", "Edificio alto", "Animale dal collo lungo",
-            "Animale con la proboscide"
+        const Parole = ["ABBUFFATA", "ANGUILLOSO", "CICALECCIO", "COCCIUTAGGINE", "DISCORDANTE",
+            "ELETTROLISI", "EQUANIMITA'", "ERMELLINO", "FILOLOGIA", "FRANGENTE",
+            "GHIRLANDA", "GIUNCATA", "IMBRACATURA", "IMPRONTE", "INCANDESCENZA",
+            "INFRANGIBILE", "LAMPADOFORA", "LATRATO", "MANGANELLO", "MORFEMICO",
+            "NEVRALGIA", "OLOCAUSTO", "PARMENIDE", "PENTAFONO",
+            "PIPISTRELLO", "RECONDITO", "RIGOGOLO", "SCARTABELLO", "SMAGLIATURA",
+            "SOTTERRANEO", "SPIRAGLIO", "STRALLARE", "STRIDULO", "SUBLIME", "ACULEO",
+            "LAPSUS", "ALLUVIONE", "BISBIGLIO", "BLASFEMO", "CAMALEONTE", "CANAGLIA",
+            "SCRUTINIO", "CAPILLARE", "CAPRICCIOSO", "BACKUP", "PASSWORD", "UGUAGLIANZA",
+            "ECO", "EGOISMO", "ELEGANTE", "ELOGIO", "EMBRIONE", "EMPATIA", "ENCEFALO",
+            "ENIGMA", "DISTINTIVO", "LEGGENDA", "MIRACOLOSO", "MISTICO", "TRASCENDENTE",
+            "UMANITA'", "RASTRELLO", "INTERFONO", "MUTUO", "DISPENSER", "PROFETA",
+            "RIDONDANTE", "MONARCA", "MONETIZZARE", "SISTEMATICO", "DISTILLATORE"];
+        const Consigli = ["Mangiare eccessivamente", "Simile all'anguilla", "Chiacchiericcio", "Atteggiamento da testardo", "Non armonioso",
+            "Decomposizione elettrica", "Calma", "Animale con pelo prezioso", "Studio di testi", "Momento preciso",
+            "Decorazione natalizia", "Materiale intrecciato", "Attrezzatura anti-infortunio", "Segni di scarpe sulla neve", "Luce calda",
+            "Indistruttibile", "Portacandela antico", "Abbaio", "Oggetto per colpire utilizzato dalla polizia", "Blocchi linguistici",
+            "Dolore nervoso", "27 Gennaio", "Filosofo greco", "Strumento a fiato",
+            "Mammifero notturno", "Nascosto", "Uccello canterino", "Tavolo smistatore", "Difetto di verniciatura",
+            "Sotto terra", "Apertura piccola", "Far rumore", "Suono acuto", "Grandioso", "Oggetto pungente",
+            "Errore verbale", "Flusso d'acqua", "Sussurro leggero", "Irriverente al sacro", "Animale che cambia colore", "Disonesto",
+            "Esame dettagliato", "Molto sottile", "Instabile", "Copia sicurezza", "Codice segreto", "Parita'",
+            "Suono riflesso", "Preoccuparsi di sé", "Raffinato", "Lode", "Stadio iniziale", "Comprendere altrui", "Parte cervello",
+            "Mistero", "Simbolo", "Racconto antico", "Straordinario", "Spirituale", "Oltre limiti", "Razza umana",
+            "Strumento raccolta", "Comunicazione", "Prestito per la casa", "Distributore", "Messaggero divino", "Eccessivo",
+            "Sovrano", "Trasformare in denaro", "Organizzato", "Apparecchio distillazione"
         ];
 
         for (let i = 0; i < Parole.length; i++) {
             const idNumerico = (i + 1).toString();
-            const parolaRef = ref(database, `Facile/Parole/${idNumerico}`);
+            const parolaRef = ref(database, `Difficile/Parole/${idNumerico}`);
             set(parolaRef, Parole[i]);
         }
 
         for (let i = 0; i < Consigli.length; i++) {
             const idNumerico = (i + 1).toString();
-            const consiglioRef = ref(database, `Facile/Consigli/${idNumerico}`);
+            const consiglioRef = ref(database, `Difficile/Consigli/${idNumerico}`);
             set(consiglioRef, Consigli[i]);
         }
     </script>
