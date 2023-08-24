@@ -388,7 +388,7 @@ void startgame(){
         break;
     }
     g = 0;
-    Serial.println(a + " | " + generated + " - scelta: " + mode);
+    Serial.println(a + " | " + generated + " - scelta: " + mode + " - lunghezza: " + a.length());
     for (int i = 0; i < a.length(); i++) {
       hidden += "_";
     }
@@ -448,7 +448,7 @@ void startgame(){
           tft.setCursor(450, 10);
           tft.setTextSize(4);
           tft.print(tent);
-          Serial.println(g);
+          Serial.println("Lettere indovinate: " + String(g));
           is_present = true;
         } else if (a.charAt(s) != input){
             h++;
@@ -477,10 +477,14 @@ void startgame(){
                   tft.print(consiglio);
                 }
 
-                if((mode == 1) && (tent == 2)){
+                int lunghezzaPar = a.length();
+                if((g <= lunghezzaPar-3) && (mode == 1) && (tent == 2)){
+                  int randomico;
 
-                  int lunghezzaPar = a.length();
-                  int randomico = random(lunghezzaPar);
+                  do {
+                    randomico = random(lunghezzaPar);
+                  } while (hidden[randomico] != '_');
+
                   char lettPresa;
                   int lettCont = 0;
 
@@ -586,7 +590,7 @@ void startgame(){
           tft.setCursor(450, 10);
           tft.setTextSize(4);
           tft.print(tent);
-          Serial.println(g);
+          Serial.println("Lettere indovinate: " + String(g));
           is_present = true;
         } else if (a.charAt(s) != input2){
             h++;
@@ -617,10 +621,15 @@ void startgame(){
                   tft.print(consiglio);
                 }
 
-                if((mode == 1) && (tent == 2)){
+                int lunghezzaPar = a.length();
 
-                  int lunghezzaPar = a.length();
-                  int randomico = random(lunghezzaPar);
+                if((g <= lunghezzaPar-3) && (mode == 1) && (tent == 2)){
+                  int randomico;
+                  
+                  do {
+                    randomico = random(lunghezzaPar);
+                  } while (hidden[randomico] != '_');
+
                   char lettPresa;
                   int lettCont = 0;
 
