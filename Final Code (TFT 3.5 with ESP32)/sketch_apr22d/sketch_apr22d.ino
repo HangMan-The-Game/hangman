@@ -438,7 +438,7 @@ void startgame(){
       for (int s = 0; s < a.length(); s++) {
         if (input == a[s]) {
           hidden[s] = input;
-          delay(500);
+          // delay(500);
           g++;
           tft.setCursor(20, 100);
           tft.setTextColor(BLUE, BLACK);
@@ -509,7 +509,7 @@ void startgame(){
                 
                 // Serial1.println(tent);
                 tone(speakerPin, 500);
-                delay(1000);
+                // delay(1000);
                 noTone(speakerPin);
               }
           }
@@ -531,7 +531,7 @@ void startgame(){
       h = 0;
 
       //i++;
-      delay(500);
+      // delay(500);
       if (tent < 1 || hidden == a) {
         flag = true;
         if (hidden == a) {
@@ -539,8 +539,7 @@ void startgame(){
           tft.setTextColor(GREEN);
           tft.setTextSize(3);
           tft.print(a + " - WON"); 
-          delay(1000);
-
+          delay(750);
           z = 0;
           lello = 0;
         } else {
@@ -548,7 +547,7 @@ void startgame(){
           tft.setTextColor(RED);
           tft.setTextSize(3);
           tft.print(a + " - LOST");
-          delay(1000);
+          delay(750);
           z = 0;
           lello = 0;
         }
@@ -580,7 +579,7 @@ void startgame(){
       for (int s = 0; s < a.length(); s++) {
         if (input2 == a[s]) {
           hidden[s] = input2;
-          delay(500);
+          // delay(500);
           g++;
           tft.setCursor(20, 100);
           tft.setTextColor(BLUE, BLACK);
@@ -654,7 +653,7 @@ void startgame(){
 
                 // Serial1.println(tent);
                 tone(speakerPin, 500);
-                delay(1000);
+                // delay(1000);
                 noTone(speakerPin);
               }
             }
@@ -677,7 +676,7 @@ void startgame(){
       h = 0;
 
       //i++;
-      delay(500);
+      // delay(500);
       if (tent < 1 || hidden == a) {
         flag = true;
         if (hidden == a) {
@@ -685,7 +684,7 @@ void startgame(){
           tft.setTextColor(GREEN);
           tft.setTextSize(3);
           tft.print(a + " - WON");
-          delay(1000);
+          delay(750);
           z = 0;
           lello = 0;
         } else {
@@ -693,7 +692,7 @@ void startgame(){
           tft.setTextColor(RED);
           tft.setTextSize(3);
           tft.print(a + " - LOST");
-          delay(1000);
+          delay(750);
           z = 0;
           lello = 0;
         }
@@ -754,7 +753,7 @@ void versus(){
 
     if (input) {
       a += input;
-      delay(500);
+      // delay(500);
       g++;
       tft.setCursor(20, 100);
       tft.setTextColor(BLUE, BLACK);
@@ -767,7 +766,7 @@ void versus(){
       } else {
         a += input2;
       }
-      delay(500);
+      // delay(500);
       g++;
       tft.setCursor(20, 100);
       tft.setTextColor(BLUE, BLACK);
@@ -827,7 +826,7 @@ void versus(){
       for (int s = 0; s < a.length(); s++) {
         if (input == a[s]) {
           hidden[s] = input;
-          delay(500);
+          // delay(500);
           g++;
           tft.setCursor(20, 100);
           tft.setTextColor(BLUE, BLACK);
@@ -859,7 +858,7 @@ void versus(){
                 tent--;
                 // Serial1.println(tent);
                 tone(speakerPin, 500);
-                delay(1000);
+                // delay(1000);
                 noTone(speakerPin);
               }
           }
@@ -881,7 +880,7 @@ void versus(){
       h = 0;
 
       //i++;
-      delay(500);
+      // delay(500);
       if (tent < 1 || hidden == a) {
         flag = true;
         if (hidden == a) {
@@ -889,8 +888,7 @@ void versus(){
           tft.setTextColor(GREEN);
           tft.setTextSize(3);
           tft.print(a + " - WON"); 
-          delay(1000);
-
+          delay(750);
           z = 0;
           lello = 0;
         } else {
@@ -898,7 +896,7 @@ void versus(){
           tft.setTextColor(RED);
           tft.setTextSize(3);
           tft.print(a + " - LOST");
-          delay(1000);
+          delay(750);
           z = 0;
           lello = 0;
         }
@@ -930,7 +928,7 @@ void versus(){
       for (int s = 0; s < a.length(); s++) {
         if (input2 == a[s]) {
           hidden[s] = input2;
-          delay(500);
+          // delay(500);
           g++;
           tft.setCursor(20, 100);
           tft.setTextColor(BLUE, BLACK);
@@ -964,7 +962,7 @@ void versus(){
                 tent--;
                 // Serial1.println(tent);
                 tone(speakerPin, 500);
-                delay(1000);
+                // delay(1000);
                 noTone(speakerPin);
               }
             }
@@ -987,7 +985,7 @@ void versus(){
       h = 0;
 
       //i++;
-      delay(500);
+      // delay(500);
       if (tent < 1 || hidden == a) {
         flag = true;
         if (hidden == a) {
@@ -995,7 +993,7 @@ void versus(){
           tft.setTextColor(GREEN);
           tft.setTextSize(3);
           tft.print(a + " - WON");
-          delay(1000);
+          delay(750);
           z = 0;
           lello = 0;
         } else {
@@ -1003,7 +1001,7 @@ void versus(){
           tft.setTextColor(RED);
           tft.setTextSize(3);
           tft.print(a + " - LOST");
-          delay(1000);
+          delay(750);
           z = 0;
           lello = 0;
         }
@@ -1107,7 +1105,7 @@ void guess(){
       tft.setTextColor(BLUE, BLACK);
       tft.setTextSize(6);
       tft.print(beforeguess);
-      delay(500);
+      // delay(500);
 
       if (i == a.length()) {
         flag = true;
@@ -1117,11 +1115,11 @@ void guess(){
           tft.setTextSize(3);
           tft.print(a + " - WON");
           hidden = a;
-          delay(1000);
+          delay(750);
           z = 0;
           lello = 0;
         } else {	
-          delay(1000);
+          delay(750);
           Serial.println("ERRATO");
           tenterrato = 1;
           startgame();	
@@ -1164,7 +1162,7 @@ void guess(){
       tft.setTextColor(BLUE, BLACK);
       tft.setTextSize(6);
       tft.print(beforeguess);
-      delay(500);
+      // delay(500);
 
       if (i == a.length()) {
         flag = true;
@@ -1174,11 +1172,11 @@ void guess(){
           tft.setTextSize(3);
           tft.print(a + " - WON");
           hidden = a;
-          delay(1000);
+          delay(750);
           z = 0;
           lello = 0;
         } else {	
-          delay(1000);
+          delay(750);
           Serial.println("ERRATO");
           tenterrato = 1;
           startgame();
