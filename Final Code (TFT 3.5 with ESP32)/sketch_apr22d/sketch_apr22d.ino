@@ -10,14 +10,14 @@ char keys[ROWS][COLS] = {
   {'A','B','C','D'},
   {'I','J','K','L'},
   {'Q','R','S','T'},
-  {'Y','Z','Z','='},
+  {'Y','Z','=','='},
 };
 
 char keys2[ROWS][COLS] = {
   {'E','F','G','H'},
   {'M','N','O','P'},
   {'U','V','W','X'},
-  {'Z','^','?','|'},
+  {'?','^','?','|'},
 };
 
 byte rowPins[ROWS] = {29, 28, 27, 26};
@@ -719,7 +719,9 @@ void versus(){
     input2 = secondKpd.getKey();
 
     if (input) {
-      a += input;
+      if(input == '='){}else{
+        a += input;
+      }
       // delay(500);
       g++;
       tft.setCursor(20, 100);
@@ -730,7 +732,8 @@ void versus(){
     if (input2) {
       if(input2 == '^'){
         mamma = 1;
-      } else {
+      } 
+      if(input2 == '|' || input2 == '?'){}else {
         a += input2;
       }
       // delay(500);
@@ -1052,12 +1055,12 @@ void guess(){
       }
 
       for (int s = 0; s < beforeguess.length(); s++) {
-          if (beforeguess.charAt(s) == '_') {
+            if(input == '='){}else{
               beforeguess.setCharAt(s, input);
               i = s;
               substitutionMade = true;
               break;
-          }
+            }
       }
 
       if (allLettersGuessed && substitutionMade) {
@@ -1098,6 +1101,11 @@ void guess(){
     }
 
     if (input2) {
+      if(input2 == '|'){
+        lello = 0;
+        z = 0;
+      }
+      if(input2 == '?' || input2 == '^'){}
       boolean substitutionMade = false;
       boolean allLettersGuessed = true;
 
@@ -1110,10 +1118,13 @@ void guess(){
 
       for (int s = 0; s < beforeguess.length(); s++) {
           if (beforeguess.charAt(s) == '_') {
+            if(input2 == '|' || input2 == '?' || input2 == '^'){}else{
+              
               beforeguess.setCharAt(s, input2);
               i = s;
               substitutionMade = true;
               break;
+            }
           }
       }
 
