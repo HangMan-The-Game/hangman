@@ -19,6 +19,8 @@ int x;
 
 int numeroDiParoleFacili = 176, numeroDiParoleMedie = 228, numeroDiParoleDifficili = 71;  
 
+String lang = "ITA";
+
 int receivedValue = 1, after = 1;
 String mode = "Facile";
 bool xGenerated = false;
@@ -75,8 +77,8 @@ void loop() {
   }
 
   if (Firebase.ready() && xGenerated) {
-    String path = "/" + mode +"/Parole/" + String(x);
-    String pathConsigli = "/" + mode + "/Consigli/" + String(x);
+    String path = lang + "/" + mode +"/Parole/" + String(x);
+    String pathConsigli = lang + "/" + mode + "/Consigli/" + String(x);
     String parola = Firebase.getString(fbdo, path) ? fbdo.to<const char *>() : "";
     String consiglio = Firebase.getString(fbdo, pathConsigli) ? fbdo.to<const char *>() : "";
 
