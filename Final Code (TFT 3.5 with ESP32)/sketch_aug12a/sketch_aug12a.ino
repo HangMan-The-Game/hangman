@@ -15,9 +15,13 @@
 
 FirebaseData fbdo;
 
-int x, y;
+int x;
 
-int receivedValue = 0;
+int numeroDiParoleFacili = 176, numeroDiParoleMedie = 228, numeroDiParoleDifficili = 71;  
+
+int receivedValue = 1, after = 1;
+String mode = "Facile";
+bool xGenerated = false;
 
 void setup() {
   Serial.begin(9600);
@@ -40,34 +44,46 @@ void setup() {
   
   Firebase.begin(DATABASE_URL, API_KEY);
   Firebase.setDoubleDigits(5);
+
+  randomSeed(analogRead(0));
 }
 
 void loop() {
-  x = random(1, 176);
+  if (Serial.available() > 0) {
+    receivedValue = Serial.parseInt();
+    after = receivedValue;
+  }
 
-/*   if (Firebase.ready()) {
-    String path = "/Facile/Parole/" + String(x);
-    String pathConsigli = "/Facile/Consigli/" + String(x);
-    Serial.println("Stringa: " + Firebase.getString(fbdo, path) ? fbdo.to<const char *>() : fbdo.errorReason().c_str());
-    Serial.println("Stringa Consigli: " + Firebase.getString(fbdo, pathConsigli) ? fbdo.to<const char *>() : fbdo.errorReason().c_str());
-    delay(1500);
-  } */
+  if (after) {
+    switch (after) {
+      case 1:
+        mode = "Facile";
+        x = random(1, numeroDiParoleFacili + 1);
+        xGenerated = true;
+        break;
+      case 2:
+        mode = "Medio";
+        x = random(1, numeroDiParoleMedie + 1);
+        xGenerated = true;
+        break;
+      case 3:
+        mode = "Difficile";
+        x = random(1, numeroDiParoleDifficili + 1);
+        xGenerated = true;
+        break;
+    }
+  }
 
-  if (Firebase.ready()) {
-    String path = "/Facile/Parole/" + String(x);
-    String pathConsigli = "/Facile/Consigli/" + String(x);
+  if (Firebase.ready() && xGenerated) {
+    String path = "/" + mode +"/Parole/" + String(x);
+    String pathConsigli = "/" + mode + "/Consigli/" + String(x);
     String parola = Firebase.getString(fbdo, path) ? fbdo.to<const char *>() : "";
     String consiglio = Firebase.getString(fbdo, pathConsigli) ? fbdo.to<const char *>() : "";
 
     String parolaEconsiglio = parola + "\n" + consiglio + "\n";
     Serial.print(parolaEconsiglio);
-
+    xGenerated = false;
     delay(500);
   }
 
-  /* if (Serial.available() > 0) {
-    receivedValue = Serial.parseInt();
-    Serial.print("Dato ricevuto dall'Arduino: ");
-    Serial.println(receivedValue);
-  } */
 }

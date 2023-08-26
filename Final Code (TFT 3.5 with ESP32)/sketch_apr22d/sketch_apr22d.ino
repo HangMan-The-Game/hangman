@@ -242,6 +242,7 @@ void loop() {
 }
 
 void home(){
+  Serial1.println(mode);
   easy.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   med.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   hard.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
@@ -303,6 +304,7 @@ void home(){
 }
 
 void startgame(){
+  Serial1.println(mode);
   Serial.println(a + " " + consiglio);
   Serial.println("Parola Ricevuta: " + parolaRicevuta);
   Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
