@@ -46,13 +46,13 @@
 
         for (let i = 0; i < Parole.length; i++) {
             const idNumerico = (i + 1).toString();
-            const parolaRef = ref(database, `Difficile/Parole/${idNumerico}`);
+            const parolaRef = ref(database, `ITA/Difficile/Parole/${idNumerico}`);
             set(parolaRef, Parole[i]);
         }
 
         for (let i = 0; i < Consigli.length; i++) {
             const idNumerico = (i + 1).toString();
-            const consiglioRef = ref(database, `Difficile/Consigli/${idNumerico}`);
+            const consiglioRef = ref(database, `ITA/Difficile/Consigli/${idNumerico}`);
             set(consiglioRef, Consigli[i]);
         }
     </script>
