@@ -50,10 +50,12 @@ const int TS_LEFT = 948, TS_RT = 233, TS_TOP = 139, TS_BOT = 921;
 
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
 MCUFRIEND_kbv tft;
-Adafruit_GFX_Button start, diff, easy, med, hard, backhome, vs;
+Adafruit_GFX_Button start, diff, easy, med, hard, backhome, vs, lang, ita, eng;
 
 String menu = "home";
 int mode = 1;
+
+String language = "ITA";
 
 String ndiff = "Easy";
 
@@ -132,18 +134,23 @@ void setup() {
     tft.print("- Hard");
   }
 
+  tft.setCursor(185, 250);
+  tft.print("- " + language);
+
   start.initButton(&tft, 90, 110, 140, 40, WHITE, BLUE, WHITE, "START", 4);
   diff.initButton(&tft, 90, 160, 140, 40, WHITE, GREEN, WHITE, "MODE", 4);
   vs.initButton(&tft, 90, 210, 140, 40, WHITE, RED, WHITE, "1vs1", 4);
+  lang.initButton(&tft, 90, 260, 140, 40, WHITE, CYAN, WHITE, "LANG", 4);
 
   start.drawButton(false);
   diff.drawButton(false);
   vs.drawButton(false);
+  lang.drawButton(false);
 }
 
 // Array of button addresses to behave like a list
 Adafruit_GFX_Button *buttons[] = {
-  &start, &diff, &easy, &med, &hard, &backhome, &vs, NULL
+  &start, &diff, &easy, &med, &hard, &backhome, &vs, &lang, &ita, &eng, NULL
   };
 
 bool update_button(Adafruit_GFX_Button *b, bool down) {
@@ -218,6 +225,19 @@ void loop() {
       menu = "1vs1";
 
       versus();
+    }    
+    if(buttons[7]->isPressed()){
+      menu = "LANG";
+
+      lingua();
+    }
+    if(buttons[8]->isPressed()){
+      language = "ITA";
+      Serial1.println(4);
+    }
+    if(buttons[9]->isPressed()){
+      language = "ENG";
+      Serial1.println(5);
     }
   }
     if (Serial1.available() > 0) {
@@ -243,9 +263,16 @@ void loop() {
 
 void home(){
   Serial1.println(mode);
+  if(language == "ITA"){
+    Serial1.println(4);
+  } else if(language == "ENG"){
+    Serial1.println(5);
+  }
   easy.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   med.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   hard.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  ita.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  eng.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   backhome.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
 
   tft.fillScreen(BLACK);
@@ -263,13 +290,18 @@ void home(){
     tft.print("- Hard");
   }
 
+    tft.setCursor(185, 250);
+  tft.print("- " + language);
+
   start.initButton(&tft, 90, 110, 140, 40, WHITE, BLUE, WHITE, "START", 4);
   diff.initButton(&tft, 90, 160, 140, 40, WHITE, GREEN, WHITE, "MODE", 4);
   vs.initButton(&tft, 90, 210, 140, 40, WHITE, RED, WHITE, "1vs1", 4);
+  lang.initButton(&tft, 90, 260, 140, 40, WHITE, CYAN, WHITE, "LANG", 4);
 
   start.drawButton(false);
   diff.drawButton(false);
   vs.drawButton(false);
+  lang.drawButton(false);
 
   parolaRicevuta = "";
   consiglioRicevuto = "";
@@ -305,6 +337,11 @@ void home(){
 
 void startgame(){
   Serial1.println(mode);
+  if(language == "ITA"){
+    Serial1.println(4);
+  } else if(language == "ENG"){
+    Serial1.println(5);
+  }
   Serial.println(a + " " + consiglio);
   Serial.println("Parola Ricevuta: " + parolaRicevuta);
   Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
@@ -1200,6 +1237,8 @@ void difficolta(){
   start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   vs.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  lang.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  
   tft.fillScreen(BLACK);
 
   tft.setCursor(185, 10);
@@ -1215,6 +1254,44 @@ void difficolta(){
   easy.drawButton(false);
   med.drawButton(false);
   hard.drawButton(false);
+  backhome.drawButton(false);
+
+  update_button_list(buttons);  //use helper function
+  for (int i = 2; buttons[i] != NULL; i++) {
+    if (buttons[i]->isPressed()) {
+      Serial.println(i);
+      buttons[i]->drawButton(true);
+    }
+    if (buttons[i]->justReleased()) {
+      buttons[i]->drawButton(false);
+    }
+  }
+}
+
+void lingua(){
+  start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  vs.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  lang.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  
+  tft.fillScreen(BLACK);
+
+  tft.setCursor(185, 10);
+  tft.setTextColor(GREEN);
+  tft.setTextSize(3);
+  tft.print("HANGMAN");
+  
+  tft.setCursor(80, 40);
+  tft.setTextColor(RED);
+  tft.setTextSize(3.5);
+  tft.print("Choose the Language");
+
+  ita.initButton(&tft, 180, 140, 110, 40, WHITE, BLUE, WHITE, "ITA", 4);
+  eng.initButton(&tft, 310, 140, 110, 40, WHITE, BLUE, WHITE, "ENG", 4);
+  backhome.initButton(&tft, 245, 250, 100, 40, WHITE, RED, WHITE, "HOME", 3);
+
+  ita.drawButton(false);
+  eng.drawButton(false);
   backhome.drawButton(false);
 
   update_button_list(buttons);  //use helper function
