@@ -56,36 +56,59 @@ void loop() {
     after = receivedValue;
   }
 
-  if (after) {
-    switch (after) {
-      case 1:
-        mode = "Facile";
-        x = random(1, numeroDiParoleFacili + 1);
-        xGenerated = true;
-        break;
-      case 2:
-        mode = "Medio";
-        x = random(1, numeroDiParoleMedie + 1);
-        xGenerated = true;
-        break;
-      case 3:
-        mode = "Difficile";
-        x = random(1, numeroDiParoleDifficili + 1);
-        xGenerated = true;
-        break;
-    }
+  if (after != 0) {
+    handleReceivedValue();
   }
 
   if (Firebase.ready() && xGenerated) {
-    String path = lang + "/" + mode +"/Parole/" + String(x);
-    String pathConsigli = lang + "/" + mode + "/Consigli/" + String(x);
-    String parola = Firebase.getString(fbdo, path) ? fbdo.to<const char *>() : "";
-    String consiglio = Firebase.getString(fbdo, pathConsigli) ? fbdo.to<const char *>() : "";
-
-    String parolaEconsiglio = parola + "\n" + consiglio + "\n";
-    Serial.print(parolaEconsiglio);
-    xGenerated = false;
-    delay(500);
+    fetchDataAndSend();
   }
+}
 
+void handleReceivedValue() {
+  switch (after) {
+    case 1:
+      mode = "Facile";
+      generateWord();
+      break;
+    case 2:
+      mode = "Medio";
+      generateWord();
+      break;
+    case 3:
+      mode = "Difficile";
+      generateWord();
+      break;
+    case 4:
+      lang = "ITA";
+      generateWord();
+      break;
+    case 5:
+      lang = "ENG";
+      generateWord();
+      break;
+  }
+}
+
+void generateWord() {
+  if (mode == "Facile") {
+    x = random(1, numeroDiParoleFacili + 1);
+  } else if (mode == "Medio") {
+    x = random(1, numeroDiParoleMedie + 1);
+  } else if (mode == "Difficile") {
+    x = random(1, numeroDiParoleDifficili + 1);
+  }
+  xGenerated = true;
+}
+
+void fetchDataAndSend() {
+  String path = lang + "/" + mode +"/Parole/" + String(x);
+  String pathConsigli = lang + "/" + mode + "/Consigli/" + String(x);
+  String parola = Firebase.getString(fbdo, path) ? fbdo.to<const char *>() : "";
+  String consiglio = Firebase.getString(fbdo, pathConsigli) ? fbdo.to<const char *>() : "";
+
+  String parolaEconsiglio = parola + "\n" + consiglio + "\n";
+  Serial.print(parolaEconsiglio);
+  xGenerated = false;
+  delay(500);
 }
