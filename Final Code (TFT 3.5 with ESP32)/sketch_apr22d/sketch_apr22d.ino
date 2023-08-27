@@ -10,14 +10,14 @@ char keys[ROWS][COLS] = {
   {'A','B','C','D'},
   {'I','J','K','L'},
   {'Q','R','S','T'},
-  {'Y','Z','=','='},
+  {'Y','Z','(','='},
 };
 
 char keys2[ROWS][COLS] = {
   {'E','F','G','H'},
   {'M','N','O','P'},
   {'U','V','W','X'},
-  {'?','^','?','|'},
+  {'(','^','?','|'},
 };
 
 byte rowPins[ROWS] = {29, 28, 27, 26};
@@ -57,7 +57,7 @@ int mode = 1;
 
 String ndiff = "Easy";
 
-String b [] = {
+/* String b [] = {
   #include "/Users/alerunza/Documents/Arduino/sketch_mar7b/ITA/word.txt"
 };
 String c [] = {
@@ -65,7 +65,7 @@ String c [] = {
 };
 String d [] = {
   #include "/Users/alerunza/Documents/Arduino/sketch_mar7b/ITA/word3.txt"
-};
+}; */
 
 String a = ""; //parola da indovinare
 String consiglio = ""; // consiglio da indovinare
@@ -392,6 +392,7 @@ void startgame(){
     input2 = secondKpd.getKey();
 
     if (input) {
+      if(input == '('){}
       if (flag) {
         i = 0;
       }
@@ -417,7 +418,9 @@ void startgame(){
           Serial.println("Lettere indovinate: " + String(g));
           is_present = true;
         } else if (a.charAt(s) != input){
+          if(input == '=' || input == '('){} else{
             h++;
+          }
           }
       }
       if (!is_present) {
@@ -431,7 +434,9 @@ void startgame(){
           if(input == wrong[i]){
             is_wrong = true;
           } else{
-              wrong += input;
+              if(input == '=' || input == '('){} else{
+                wrong += input;
+              }
               // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
@@ -524,6 +529,7 @@ void startgame(){
     bool special = false;
 
     if (input2) {
+      if(input2 == '('){}
       if(input2 == '?'){
         beforeguess = hidden;
         guess();
@@ -558,7 +564,9 @@ void startgame(){
           Serial.println("Lettere indovinate: " + String(g));
           is_present = true;
         } else if (a.charAt(s) != input2){
-            h++;
+            if(input2 == '(' || input2 == '^'){} else{
+              h++;
+            }
           }
       }
       if (!is_present) {
@@ -574,7 +582,9 @@ void startgame(){
             if(special){
               break;
             }else{
-              wrong += input2;
+              if(input2 == '(' || input2 == '^'){} else{
+                wrong += input2;
+              }
               // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
@@ -719,7 +729,7 @@ void versus(){
     input2 = secondKpd.getKey();
 
     if (input) {
-      if(input == '='){}else{
+      if(input == '=' || input == '('){}else{
         a += input;
       }
       // delay(500);
@@ -733,7 +743,7 @@ void versus(){
       if(input2 == '^'){
         mamma = 1;
       } 
-      if(input2 == '|' || input2 == '?'){}else {
+      if(input2 == '|' || input2 == '?' || input2 == '('){}else {
         a += input2;
       }
       // delay(500);
@@ -783,6 +793,7 @@ void versus(){
     input2 = secondKpd.getKey();
 
     if (input) {
+      if(input == '=' || input == '('){}
       if (flag) {
         i = 0;
       }
@@ -808,7 +819,9 @@ void versus(){
           Serial.println(g);
           is_present = true;
         } else if (a.charAt(s) != input){
-            h++;
+            if(input == '=' || input == '('){} else{
+              h++;
+            }
           }
       }
       if (!is_present) {
@@ -822,7 +835,9 @@ void versus(){
           if(input == wrong[i]){
             is_wrong = true;
           } else{
-              wrong += input;
+              if(input == '=' || input == '('){} else{
+                wrong += input;
+              }
               // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
@@ -885,6 +900,7 @@ void versus(){
         z = 0;
         special = true;
       }
+      if(input2 == '('){}
       if (flag) {
         i = 0;
       }
@@ -910,7 +926,9 @@ void versus(){
           Serial.println(g);
           is_present = true;
         } else if (a.charAt(s) != input2){
-            h++;
+            if(input2 == '(' || input2 == '^'){} else{
+              h++;
+            }
           }
       }
       if (!is_present) {
@@ -926,7 +944,9 @@ void versus(){
             if(special){
               break;
             }else{
-              wrong += input2;
+              if(input2 == '(' || input2 == '^'){} else{
+                wrong += input2;
+              }
               // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
@@ -1042,8 +1062,9 @@ void guess(){
     
     if(input) {
       if(input == '='){
-        startgame();
+        /* startgame(); */
       }
+      if(input == '('){}
       boolean substitutionMade = false;
       boolean allLettersGuessed = true;
 
@@ -1055,12 +1076,14 @@ void guess(){
       }
 
       for (int s = 0; s < beforeguess.length(); s++) {
-            if(input == '='){}else{
+            if (beforeguess.charAt(s) == '_') {
+              if(input == '=' || input == '('){}else{
               beforeguess.setCharAt(s, input);
               i = s;
               substitutionMade = true;
               break;
             }
+          }
       }
 
       if (allLettersGuessed && substitutionMade) {
@@ -1105,7 +1128,7 @@ void guess(){
         lello = 0;
         z = 0;
       }
-      if(input2 == '?' || input2 == '^'){}
+      if(input2 == '?' || input2 == '^' || input2 == '('){}
       boolean substitutionMade = false;
       boolean allLettersGuessed = true;
 
@@ -1118,7 +1141,7 @@ void guess(){
 
       for (int s = 0; s < beforeguess.length(); s++) {
           if (beforeguess.charAt(s) == '_') {
-            if(input2 == '|' || input2 == '?' || input2 == '^'){}else{
+            if(input2 == '|' || input2 == '?' || input2 == '^' || input2 == '('){}else{
               
               beforeguess.setCharAt(s, input2);
               i = s;
