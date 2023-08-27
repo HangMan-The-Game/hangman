@@ -742,8 +742,7 @@ void versus(){
     if (input2) {
       if(input2 == '^'){
         mamma = 1;
-      } 
-      if(input2 == '|' || input2 == '?' || input2 == '('){}else {
+      } else if(input2 == '|' || input2 == '?' || input2 == '('){}else {
         a += input2;
       }
       // delay(500);
