@@ -1352,11 +1352,11 @@ void impostazioni(){
   if(mode == 1){
     tft.print("- Easy");
   } else if(mode == 2){
-    tft.print("- Medium");
+    tft.print("- Med");
   } else if(mode == 3){
     tft.print("- Hard");
   }
-
+  
   tft.setCursor(50, 170);
   tft.print(language + " -");
 
