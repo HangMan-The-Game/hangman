@@ -757,17 +757,17 @@ void versus(){
   tft.fillScreen(BLACK);
 
   tft.setCursor(20, 10);
-  tft.setTextColor(GREEN);
+  tft.setTextColor(RED);
   tft.setTextSize(4);
   tft.print("HangMan | ");
   tft.setCursor(250, 15);
-  tft.setTextColor(RED);
+  tft.setTextColor(WHITE);
   tft.setTextSize(3);
 
   tft.print(ndiff + " Mode");
 
   tft.setCursor(16, 50);
-  tft.setTextColor(RED);
+  tft.setTextColor(WHITE);
   tft.setTextSize(4);
   tft.print("Input Mode");
 
@@ -830,11 +830,11 @@ void versus(){
   tft.fillScreen(BLACK);
 
   tft.setCursor(20, 10);
-  tft.setTextColor(GREEN);
+  tft.setTextColor(RED);
   tft.setTextSize(4);
   tft.print("HangMan | ");
   tft.setCursor(250, 15);
-  tft.setTextColor(RED);
+  tft.setTextColor(WHITE);
   tft.setTextSize(3);
   tft.print("1vs1 Mode");
 
@@ -1076,15 +1076,15 @@ void guess(){
   lello = 1;
   tft.fillScreen(BLACK);
   tft.setCursor(20, 10);
-  tft.setTextColor(GREEN);
+  tft.setTextColor(RED);
   tft.setTextSize(4);
   tft.print("HangMan | ");
   tft.setCursor(250, 15);
-  tft.setTextColor(RED);
+  tft.setTextColor(WHITE);
   tft.setTextSize(3);
   tft.print("Guess Mode");
   tft.setCursor(20, 57);
-  tft.setTextColor(YELLOW);
+  tft.setTextColor(WHITE);
   tft.setTextSize(3);
   tft.print("Guess the Word");
 
@@ -1258,18 +1258,19 @@ void difficolta(){
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   vs.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   lang.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  backhome.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   
   tft.fillScreen(BLACK);
 
   tft.setCursor(185, 10);
-  tft.setTextColor(GREEN);
+  tft.setTextColor(RED);
   tft.setTextSize(3);
   tft.print("HANGMAN");
 
   easy.initButton(&tft, 70, 120, 110, 40, WHITE, RED, WHITE, "EASY", 4);
   med.initButton(&tft, 240, 120, 180, 40, WHITE, RED, WHITE, "MEDIUM", 4);
   hard.initButton(&tft, 410, 120, 110, 40, WHITE, RED, WHITE, "HARD", 4);
-  backop.initButton(&tft, 66, 250, 100, 40, WHITE, BLUE, WHITE, "HOME", 3);
+  backop.initButton(&tft, 240, 250, 110, 40, WHITE, BLUE, WHITE, "HOME", 4);
 
   easy.drawButton(false);
   med.drawButton(false);
@@ -1293,22 +1294,23 @@ void lingua(){
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   vs.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   lang.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  backhome.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   
   tft.fillScreen(BLACK);
 
   tft.setCursor(185, 10);
-  tft.setTextColor(GREEN);
+  tft.setTextColor(RED);
   tft.setTextSize(3);
   tft.print("HANGMAN");
   
   tft.setCursor(80, 40);
-  tft.setTextColor(RED);
+  tft.setTextColor(WHITE);
   tft.setTextSize(3.5);
   tft.print("Choose the Language");
 
-  ita.initButton(&tft, 180, 140, 110, 40, WHITE, BLUE, WHITE, "ITA", 4);
-  eng.initButton(&tft, 310, 140, 110, 40, WHITE, BLUE, WHITE, "ENG", 4);
-  backop.initButton(&tft, 245, 250, 100, 40, WHITE, RED, WHITE, "HOME", 3);
+  ita.initButton(&tft, 180, 140, 110, 40, WHITE, RED, WHITE, "ITA", 4);
+  eng.initButton(&tft, 310, 140, 110, 40, WHITE, RED, WHITE, "ENG", 4);
+  backop.initButton(&tft, 245, 250, 110, 40, WHITE, BLUE, WHITE, "HOME", 4);
 
   ita.drawButton(false);
   eng.drawButton(false);
