@@ -50,7 +50,7 @@ const int TS_LEFT = 948, TS_RT = 233, TS_TOP = 139, TS_BOT = 921;
 
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
 MCUFRIEND_kbv tft;
-Adafruit_GFX_Button start, diff, easy, med, hard, backhome, vs, lang, ita, eng;
+Adafruit_GFX_Button start, diff, easy, med, hard, backhome, vs, lang, ita, eng, options, backop, play;
 
 String menu = "home";
 int mode = 1;
@@ -121,7 +121,23 @@ void setup() {
   tft.begin(ID);
   tft.setRotation(1);
   tft.fillScreen(BLACK);
-  tft.setCursor(185, 10);
+
+  tft.setCursor(145, 10);
+  tft.setTextColor(RED);
+  tft.setTextSize(5);
+  tft.print("HANGMAN");
+  tft.setCursor(175, 60);
+  tft.setTextColor(WHITE);
+  tft.setTextSize(3);
+  tft.print("THE GAME");
+
+  play.initButton(&tft, 245, 150, 175, 40, WHITE, RED, WHITE, "PLAY", 4);
+  options.initButton(&tft, 245, 200, 175, 40, WHITE, RED, WHITE, "OPTIONS", 4);
+
+  play.drawButton(false);
+  options.drawButton(false);
+
+  /* tft.setCursor(185, 10);
   tft.setTextColor(GREEN);
   tft.setTextSize(3);
   tft.print("HANGMAN");
@@ -145,12 +161,12 @@ void setup() {
   start.drawButton(false);
   diff.drawButton(false);
   vs.drawButton(false);
-  lang.drawButton(false);
+  lang.drawButton(false); */
 }
 
 // Array of button addresses to behave like a list
 Adafruit_GFX_Button *buttons[] = {
-  &start, &diff, &easy, &med, &hard, &backhome, &vs, &lang, &ita, &eng, NULL
+  &start, &diff, &easy, &med, &hard, &backhome, &vs, &lang, &ita, &eng, &options, &backop, &play, NULL
   };
 
 bool update_button(Adafruit_GFX_Button *b, bool down) {
@@ -239,6 +255,21 @@ void loop() {
       language = "ENG";
       Serial1.println(5);
     }
+    if(buttons[10]->isPressed()){
+      menu = "options";
+
+      impostazioni();
+    }
+    if(buttons[11]->isPressed()){
+      menu = "options";
+
+      impostazioni();
+    }
+    if(buttons[12]->isPressed()){
+      menu = "play";
+
+      giocamenu();
+    }
   }
     if (Serial1.available() > 0) {
       String receivedString = Serial1.readStringUntil('\n');
@@ -268,40 +299,29 @@ void home(){
   } else if(language == "ENG"){
     Serial1.println(5);
   }
-  easy.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
-  med.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
-  hard.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
-  ita.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
-  eng.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+
+  start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  vs.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  lang.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   backhome.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
 
   tft.fillScreen(BLACK);
 
-  tft.setCursor(185, 10);
-  tft.setTextColor(GREEN);
-  tft.setTextSize(3);
+  tft.setCursor(145, 10);
+  tft.setTextColor(RED);
+  tft.setTextSize(5);
   tft.print("HANGMAN");
-  tft.setCursor(185, 100);
-  if(mode == 1){
-    tft.print("- Easy");
-  } else if(mode == 2){
-    tft.print("- Medium");
-  } else if(mode == 3){
-    tft.print("- Hard");
-  }
+  tft.setCursor(175, 60);
+  tft.setTextColor(WHITE);
+  tft.setTextSize(3);
+  tft.print("THE GAME");
 
-    tft.setCursor(185, 250);
-  tft.print("- " + language);
+  play.initButton(&tft, 245, 150, 175, 40, WHITE, RED, WHITE, "PLAY", 4);
+  options.initButton(&tft, 245, 200, 175, 40, WHITE, RED, WHITE, "OPTIONS", 4);
 
-  start.initButton(&tft, 90, 110, 140, 40, WHITE, BLUE, WHITE, "START", 4);
-  diff.initButton(&tft, 90, 160, 140, 40, WHITE, GREEN, WHITE, "MODE", 4);
-  vs.initButton(&tft, 90, 210, 140, 40, WHITE, RED, WHITE, "1vs1", 4);
-  lang.initButton(&tft, 90, 260, 140, 40, WHITE, CYAN, WHITE, "LANG", 4);
-
-  start.drawButton(false);
-  diff.drawButton(false);
-  vs.drawButton(false);
-  lang.drawButton(false);
+  play.drawButton(false);
+  options.drawButton(false);
 
   parolaRicevuta = "";
   consiglioRicevuto = "";
@@ -1246,15 +1266,15 @@ void difficolta(){
   tft.setTextSize(3);
   tft.print("HANGMAN");
 
-  easy.initButton(&tft, 70, 120, 110, 40, WHITE, GREEN, WHITE, "EASY", 4);
-  med.initButton(&tft, 240, 120, 180, 40, WHITE, GREEN, WHITE, "MEDIUM", 4);
-  hard.initButton(&tft, 410, 120, 110, 40, WHITE, GREEN, WHITE, "HARD", 4);
-  backhome.initButton(&tft, 66, 250, 100, 40, WHITE, BLUE, WHITE, "HOME", 3);
+  easy.initButton(&tft, 70, 120, 110, 40, WHITE, RED, WHITE, "EASY", 4);
+  med.initButton(&tft, 240, 120, 180, 40, WHITE, RED, WHITE, "MEDIUM", 4);
+  hard.initButton(&tft, 410, 120, 110, 40, WHITE, RED, WHITE, "HARD", 4);
+  backop.initButton(&tft, 66, 250, 100, 40, WHITE, BLUE, WHITE, "HOME", 3);
 
   easy.drawButton(false);
   med.drawButton(false);
   hard.drawButton(false);
-  backhome.drawButton(false);
+  backop.drawButton(false);
 
   update_button_list(buttons);  //use helper function
   for (int i = 2; buttons[i] != NULL; i++) {
@@ -1269,7 +1289,7 @@ void difficolta(){
 }
 
 void lingua(){
-  start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  play.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   vs.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   lang.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
@@ -1288,14 +1308,140 @@ void lingua(){
 
   ita.initButton(&tft, 180, 140, 110, 40, WHITE, BLUE, WHITE, "ITA", 4);
   eng.initButton(&tft, 310, 140, 110, 40, WHITE, BLUE, WHITE, "ENG", 4);
-  backhome.initButton(&tft, 245, 250, 100, 40, WHITE, RED, WHITE, "HOME", 3);
+  backop.initButton(&tft, 245, 250, 100, 40, WHITE, RED, WHITE, "HOME", 3);
 
   ita.drawButton(false);
   eng.drawButton(false);
-  backhome.drawButton(false);
+  backop.drawButton(false);
 
   update_button_list(buttons);  //use helper function
   for (int i = 2; buttons[i] != NULL; i++) {
+    if (buttons[i]->isPressed()) {
+      Serial.println(i);
+      buttons[i]->drawButton(true);
+    }
+    if (buttons[i]->justReleased()) {
+      buttons[i]->drawButton(false);
+    }
+  }
+}
+
+void impostazioni(){
+  play.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  options.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  easy.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  med.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  hard.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  ita.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  eng.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  backop.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+
+  tft.fillScreen(BLACK);
+  tft.setCursor(145, 10);
+  tft.setTextColor(RED);
+  tft.setTextSize(5);
+  tft.print("HANGMAN");
+  tft.setCursor(185, 60);
+  tft.setTextColor(WHITE);
+  tft.setTextSize(3);
+  tft.print("OPTIONS");
+
+  tft.setCursor(350, 120);
+  if(mode == 1){
+    tft.print("- Easy");
+  } else if(mode == 2){
+    tft.print("- Medium");
+  } else if(mode == 3){
+    tft.print("- Hard");
+  }
+
+  tft.setCursor(50, 170);
+  tft.print(language + " -");
+
+  diff.initButton(&tft, 245, 130, 175, 40, WHITE, RED, WHITE, "MODE", 4);
+  lang.initButton(&tft, 245, 180, 175, 40, WHITE, RED, WHITE, "LANG", 4);
+  backhome.initButton(&tft, 245, 230, 175, 40, WHITE, BLUE, WHITE, "HOME", 4);
+
+  diff.drawButton(false);
+  lang.drawButton(false);
+  backhome.drawButton(false);
+
+  parolaRicevuta = "";
+  consiglioRicevuto = "";
+
+  if (Serial1.available() > 0) {
+    String receivedString = Serial1.readStringUntil('\n');
+    receivedString.trim();
+    // Serial.println(receivedString);
+    if (parolaRicevuta.length() == 0) {
+      parolaRicevuta = receivedString;
+    } else if (consiglioRicevuto.length() == 0) {
+      consiglioRicevuto = receivedString;
+      Serial.println("Parola Ricevuta: " + parolaRicevuta);
+      Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+      nuoveStringheDisponibili = true;
+
+      /* parolaRicevuta = "";
+      consiglioRicevuto = ""; */
+    }
+  }
+
+  update_button_list(buttons);  //use helper function
+  for (int i = 0; buttons[i] != NULL; i++) {
+    if (buttons[i]->isPressed()) {
+      Serial.println(i);
+      buttons[i]->drawButton(true);
+    }
+    if (buttons[i]->justReleased()) {
+      buttons[i]->drawButton(false);
+    }
+  }
+}
+
+void giocamenu(){
+  play.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  options.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+
+  tft.fillScreen(BLACK);
+  tft.setCursor(145, 10);
+  tft.setTextColor(RED);
+  tft.setTextSize(5);
+  tft.print("HANGMAN");
+  tft.setCursor(178, 60);
+  tft.setTextColor(WHITE);
+  tft.setTextSize(3);
+  tft.print("THE GAME");
+
+  start.initButton(&tft, 245, 130, 175, 40, WHITE, RED, WHITE, "CPU", 4);
+  vs.initButton(&tft, 245, 180, 175, 40, WHITE, RED, WHITE, "1vs1", 4);
+  backhome.initButton(&tft, 245, 230, 175, 40, WHITE, BLUE, WHITE, "HOME", 4);
+
+  start.drawButton(false);
+  vs.drawButton(false);
+  backhome.drawButton(false);
+
+  parolaRicevuta = "";
+  consiglioRicevuto = "";
+
+  if (Serial1.available() > 0) {
+    String receivedString = Serial1.readStringUntil('\n');
+    receivedString.trim();
+    // Serial.println(receivedString);
+    if (parolaRicevuta.length() == 0) {
+      parolaRicevuta = receivedString;
+    } else if (consiglioRicevuto.length() == 0) {
+      consiglioRicevuto = receivedString;
+      Serial.println("Parola Ricevuta: " + parolaRicevuta);
+      Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+      nuoveStringheDisponibili = true;
+
+      /* parolaRicevuta = "";
+      consiglioRicevuto = ""; */
+    }
+  }
+
+  update_button_list(buttons);  //use helper function
+  for (int i = 0; buttons[i] != NULL; i++) {
     if (buttons[i]->isPressed()) {
       Serial.println(i);
       buttons[i]->drawButton(true);
