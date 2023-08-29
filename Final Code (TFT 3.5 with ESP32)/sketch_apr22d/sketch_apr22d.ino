@@ -1,6 +1,5 @@
 #include <Adafruit_GFX.h>
-#include <MCUFRIEND_kbv.h>
-
+#include <MCUFRIEND_kbv.h>  
 #include <Keypad.h>
 
 const byte ROWS = 4; //righe
@@ -42,6 +41,8 @@ char input, input2;
 #define YELLOW 0xFFE0
 #define WHITE 0xFFFF
 
+uint16_t coloreModalita = 0x07E0;
+
 /* #include <UTFTGLUE.h>
 UTFTGLUE myGLCD(0,A2,A1,A3,A4,A0); */
 
@@ -77,11 +78,12 @@ String hidden = "", wrong = "", beforeguess = "";
 String prendi;
 int i = 0, tent = 6, generated = 0, z = 0, g = 0, y = 0, scelta = 1, lello = 0, mamma = 0, tenterrato = 0;
 bool flag = false, guessed = false, guessmode = false, guessmodewrong = false;
-
+int selectedDifficulty = 1; // 1 = easy, 2 = medium, 3 = hard
+bool needsUpdate = false;
 bool nuoveStringheDisponibili = false;
 
-unsigned long previousMillis = 0;
-const unsigned long interval = 1500;
+unsigned long lastUpdate = 0;
+const long updateInterval = 250;
 
 //BUZZ SECTION
 
@@ -189,6 +191,7 @@ bool update_button_list(Adafruit_GFX_Button **pb) {
 }
 
 void loop() {
+  unsigned long currentMillis = millis();
   randomized = random(nword);
   update_button_list(buttons);  //use helper function
   for (int i = 0; buttons[i] != NULL; i++) {
@@ -213,22 +216,23 @@ void loop() {
     }
     if(buttons[2]->isPressed()){
       mode = 1;
-
+      selectedDifficulty = 1;
+      needsUpdate = true;
       Serial1.println("1"); 
     }
     if(buttons[3]->isPressed()){
       mode = 2;
-
       Serial1.println("2"); 
-
+      selectedDifficulty = 2;
+      needsUpdate = true;
       Serial.println("Parola Med: " + parolaRicevuta);
       Serial.println("Consiglio Med: " + consiglioRicevuto);
     }
     if(buttons[4]->isPressed()){
       mode = 3;
-
       Serial1.println("3"); 
-
+      selectedDifficulty = 3;
+      needsUpdate = true;
       Serial.println("Parola Diff: " + parolaRicevuta);
       Serial.println("Consiglio Diff: " + consiglioRicevuto);
     }
@@ -267,10 +271,23 @@ void loop() {
     }
     if(buttons[12]->isPressed()){
       menu = "play";
-
       giocamenu();
     }
-  }
+
+    if (needsUpdate) {
+        if (currentMillis - lastUpdate >= updateInterval) {
+            drawDifficultyButtons();
+            needsUpdate = false;
+            lastUpdate = currentMillis;
+        }
+    }
+
+
+/*     if (needsUpdate) { 
+        drawDifficultyButtons();
+        needsUpdate = false;
+    } */
+
     if (Serial1.available() > 0) {
       String receivedString = Serial1.readStringUntil('\n');
       receivedString.trim();
@@ -290,6 +307,7 @@ void loop() {
 
   /* Serial.println(menu + " mode: " + mode);
   Serial.println(a + " | " + generated + " - scelta: " + mode); */
+}
 }
 
 void home(){
@@ -426,17 +444,17 @@ void startgame(){
   tft.fillScreen(BLACK);
 
   tft.setCursor(20, 10);
-  tft.setTextColor(GREEN);
+  tft.setTextColor(RED);
   tft.setTextSize(4);
   tft.print("HangMan | ");
   tft.setCursor(250, 15);
-  tft.setTextColor(RED);
+  tft.setTextColor(WHITE);
   tft.setTextSize(3);
   tft.print(ndiff + " Mode");
   //Serial.println(randomized);
 
   tft.setCursor(20, 100);
-  tft.setTextColor(BLUE);
+  tft.setTextColor(WHITE);
   tft.setTextSize(6);
   tft.print(hidden);
 
@@ -466,7 +484,7 @@ void startgame(){
           // delay(500);
           g++;
           tft.setCursor(20, 100);
-          tft.setTextColor(BLUE, BLACK);
+          tft.setTextColor(WHITE, BLACK);
           tft.setTextSize(6);
           tft.print(hidden);
           tft.setCursor(450, 10);
@@ -546,7 +564,7 @@ void startgame(){
       }
 
       tft.setCursor(20, 100);
-      tft.setTextColor(BLUE, BLACK);
+      tft.setTextColor(WHITE, BLACK);
       tft.setTextSize(6);
       tft.print(hidden);
       tft.setCursor(450, 10);
@@ -565,17 +583,21 @@ void startgame(){
         flag = true;
         if (hidden == a) {
           tft.setCursor(20, 275);
-          tft.setTextColor(GREEN);
+          tft.setTextColor(WHITE);
           tft.setTextSize(3);
-          tft.print(a + " - WON"); 
+          tft.print(a);
+          tft.setTextColor(GREEN);
+          tft.print(" - WON");
           delay(750);
           z = 0;
           lello = 0;
         } else {
           tft.setCursor(20, 275);
-          tft.setTextColor(RED);
+          tft.setTextColor(WHITE);
           tft.setTextSize(3);
-          tft.print(a + " - LOST");
+          tft.print(a);
+          tft.setTextColor(RED);
+          tft.print(" - LOST");
           delay(750);
           z = 0;
           lello = 0;
@@ -612,7 +634,7 @@ void startgame(){
           // delay(500);
           g++;
           tft.setCursor(20, 100);
-          tft.setTextColor(BLUE, BLACK);
+          tft.setTextColor(WHITE, BLACK);
           tft.setTextSize(6);
           tft.print(hidden);
           tft.setCursor(450, 10);
@@ -696,7 +718,7 @@ void startgame(){
       }
       
       tft.setCursor(20, 100);
-      tft.setTextColor(BLUE, BLACK);
+      tft.setTextColor(WHITE, BLACK);
       tft.setTextSize(6);
       tft.print(hidden);
       tft.setCursor(450, 10);
@@ -715,17 +737,21 @@ void startgame(){
         flag = true;
         if (hidden == a) {
           tft.setCursor(20, 275);
-          tft.setTextColor(GREEN);
+          tft.setTextColor(WHITE);
           tft.setTextSize(3);
-          tft.print(a + " - WON");
+          tft.print(a);
+          tft.setTextColor(GREEN);
+          tft.print(" - WON");
           delay(750);
           z = 0;
           lello = 0;
         } else {
           tft.setCursor(20, 275);
-          tft.setTextColor(RED);
+          tft.setTextColor(WHITE);
           tft.setTextSize(3);
-          tft.print(a + " - LOST");
+          tft.print(a);
+          tft.setTextColor(RED);
+          tft.print(" - LOST");
           delay(750);
           z = 0;
           lello = 0;
@@ -772,7 +798,7 @@ void versus(){
   tft.print("Input Mode");
 
   tft.setCursor(16, 120);
-  tft.setTextColor(BLUE);
+  tft.setTextColor(WHITE);
   tft.setTextSize(6);
   tft.print(a);
   // tft.print(hidden);
@@ -792,7 +818,7 @@ void versus(){
       // delay(500);
       g++;
       tft.setCursor(20, 100);
-      tft.setTextColor(BLUE, BLACK);
+      tft.setTextColor(WHITE, BLACK);
       tft.setTextSize(6);
       tft.print(a);
     }
@@ -805,7 +831,7 @@ void versus(){
       // delay(500);
       g++;
       tft.setCursor(20, 100);
-      tft.setTextColor(BLUE, BLACK);
+      tft.setTextColor(WHITE, BLACK);
       tft.setTextSize(6);
       tft.print(a);
     }
@@ -839,7 +865,7 @@ void versus(){
   tft.print("1vs1 Mode");
 
   tft.setCursor(20, 100);
-  tft.setTextColor(BLUE);
+  tft.setTextColor(WHITE);
   tft.setTextSize(6);
   // tft.print(a);
   tft.print(hidden);
@@ -866,7 +892,7 @@ void versus(){
           // delay(500);
           g++;
           tft.setCursor(20, 100);
-          tft.setTextColor(BLUE, BLACK);
+          tft.setTextColor(WHITE, BLACK);
           tft.setTextSize(6);
           tft.print(hidden);
           tft.setCursor(450, 10);
@@ -907,7 +933,7 @@ void versus(){
       }
 
       tft.setCursor(20, 100);
-      tft.setTextColor(BLUE, BLACK);
+      tft.setTextColor(WHITE, BLACK);
       tft.setTextSize(6);
       tft.print(hidden);
       tft.setCursor(450, 10);
@@ -926,17 +952,21 @@ void versus(){
         flag = true;
         if (hidden == a) {
           tft.setCursor(20, 275);
-          tft.setTextColor(GREEN);
+          tft.setTextColor(WHITE);
           tft.setTextSize(3);
-          tft.print(a + " - WON"); 
+          tft.print(a);
+          tft.setTextColor(GREEN);
+          tft.print(" - WON");
           delay(750);
           z = 0;
           lello = 0;
         } else {
           tft.setCursor(20, 275);
-          tft.setTextColor(RED);
+          tft.setTextColor(WHITE);
           tft.setTextSize(3);
-          tft.print(a + " - LOST");
+          tft.print(a);
+          tft.setTextColor(RED);
+          tft.print(" - LOST");
           delay(750);
           z = 0;
           lello = 0;
@@ -973,7 +1003,7 @@ void versus(){
           // delay(500);
           g++;
           tft.setCursor(20, 100);
-          tft.setTextColor(BLUE, BLACK);
+          tft.setTextColor(WHITE, BLACK);
           tft.setTextSize(6);
           tft.print(hidden);
           tft.setCursor(450, 10);
@@ -1017,7 +1047,7 @@ void versus(){
       }
       
       tft.setCursor(20, 100);
-      tft.setTextColor(BLUE, BLACK);
+      tft.setTextColor(WHITE, BLACK);
       tft.setTextSize(6);
       tft.print(hidden);
       tft.setCursor(450, 10);
@@ -1036,17 +1066,21 @@ void versus(){
         flag = true;
         if (hidden == a) {
           tft.setCursor(20, 275);
-          tft.setTextColor(GREEN);
+          tft.setTextColor(WHITE);
           tft.setTextSize(3);
-          tft.print(a + " - WON");
+          tft.print(a);
+          tft.setTextColor(GREEN);
+          tft.print(" - WON");
           delay(750);
           z = 0;
           lello = 0;
         } else {
           tft.setCursor(20, 275);
-          tft.setTextColor(RED);
+          tft.setTextColor(WHITE);
           tft.setTextSize(3);
-          tft.print(a + " - LOST");
+          tft.print(a);
+          tft.setTextColor(RED);
+          tft.print(" - LOST");
           delay(750);
           z = 0;
           lello = 0;
@@ -1089,7 +1123,7 @@ void guess(){
   tft.print("Guess the Word");
 
   tft.setCursor(20, 100);
-  tft.setTextColor(BLUE);
+  tft.setTextColor(WHITE);
   tft.setTextSize(6);
   tft.print(hidden);
 
@@ -1151,7 +1185,7 @@ void guess(){
       }
 
       tft.setCursor(20, 100);
-      tft.setTextColor(BLUE, BLACK);
+      tft.setTextColor(WHITE, BLACK);
       tft.setTextSize(6);
       tft.print(beforeguess);
       // delay(500);
@@ -1160,9 +1194,11 @@ void guess(){
         flag = true;
         if (beforeguess == a) {
           tft.setCursor(20, 275);
-          tft.setTextColor(GREEN);
+          tft.setTextColor(WHITE);
           tft.setTextSize(3);
-          tft.print(a + " - WON");
+          tft.print(a);
+          tft.setTextColor(GREEN);
+          tft.print(" - WON");
           hidden = a;
           delay(750);
           z = 0;
@@ -1216,7 +1252,7 @@ void guess(){
       }
       
       tft.setCursor(20, 100);
-      tft.setTextColor(BLUE, BLACK);
+      tft.setTextColor(WHITE, BLACK);
       tft.setTextSize(6);
       tft.print(beforeguess);
       // delay(500);
@@ -1225,9 +1261,11 @@ void guess(){
         flag = true;
         if (beforeguess == a) {
           tft.setCursor(20, 275);
-          tft.setTextColor(GREEN);
+          tft.setTextColor(WHITE);
           tft.setTextSize(3);
-          tft.print(a + " - WON");
+          tft.print(a);
+          tft.setTextColor(GREEN);
+          tft.print(" - WON");
           hidden = a;
           delay(750);
           z = 0;
@@ -1267,17 +1305,13 @@ void difficolta(){
   tft.setTextSize(3);
   tft.print("HANGMAN");
 
-  easy.initButton(&tft, 70, 120, 110, 40, WHITE, RED, WHITE, "EASY", 4);
-  med.initButton(&tft, 240, 120, 180, 40, WHITE, RED, WHITE, "MEDIUM", 4);
-  hard.initButton(&tft, 410, 120, 110, 40, WHITE, RED, WHITE, "HARD", 4);
+  drawDifficultyButtons();
   backop.initButton(&tft, 240, 250, 110, 40, WHITE, BLUE, WHITE, "HOME", 4);
 
-  easy.drawButton(false);
-  med.drawButton(false);
-  hard.drawButton(false);
   backop.drawButton(false);
 
   update_button_list(buttons);  //use helper function
+
   for (int i = 2; buttons[i] != NULL; i++) {
     if (buttons[i]->isPressed()) {
       Serial.println(i);
@@ -1288,6 +1322,27 @@ void difficolta(){
     }
   }
 }
+
+void drawDifficultyButtons() {
+    if (selectedDifficulty == 1) {
+        easy.initButton(&tft, 70, 120, 110, 40, WHITE, GREEN, WHITE, "EASY", 4);
+        med.initButton(&tft, 240, 120, 180, 40, WHITE, RED, WHITE, "MEDIUM", 4);
+        hard.initButton(&tft, 410, 120, 110, 40, WHITE, RED, WHITE, "HARD", 4);
+    } else if (selectedDifficulty == 2) {
+        easy.initButton(&tft, 70, 120, 110, 40, WHITE, RED, WHITE, "EASY", 4);
+        med.initButton(&tft, 240, 120, 180, 40, WHITE, GREEN, WHITE, "MEDIUM", 4);
+        hard.initButton(&tft, 410, 120, 110, 40, WHITE, RED, WHITE, "HARD", 4);
+    } else if (selectedDifficulty == 3) {
+        easy.initButton(&tft, 70, 120, 110, 40, WHITE, RED, WHITE, "EASY", 4);
+        med.initButton(&tft, 240, 120, 180, 40, WHITE, RED, WHITE, "MEDIUM", 4);
+        hard.initButton(&tft, 410, 120, 110, 40, WHITE, GREEN, WHITE, "HARD", 4);
+    }
+
+    easy.drawButton(false);
+    med.drawButton(false);
+    hard.drawButton(false);
+}
+
 
 void lingua(){
   play.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
