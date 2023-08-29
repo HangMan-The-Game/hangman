@@ -79,7 +79,8 @@ String prendi;
 int i = 0, tent = 6, generated = 0, z = 0, g = 0, y = 0, scelta = 1, lello = 0, mamma = 0, tenterrato = 0;
 bool flag = false, guessed = false, guessmode = false, guessmodewrong = false;
 int selectedDifficulty = 1; // 1 = easy, 2 = medium, 3 = hard
-bool needsUpdate = false;
+int selectedLanguage = 1; // 1 = ita, 2 = eng
+bool needsUpdate = false, needsUpdateLang = false;
 bool nuoveStringheDisponibili = false;
 
 unsigned long lastUpdate = 0;
@@ -253,10 +254,14 @@ void loop() {
     }
     if(buttons[8]->isPressed()){
       language = "ITA";
+      selectedLanguage = 1;
+      needsUpdateLang = true;
       Serial1.println(4);
     }
     if(buttons[9]->isPressed()){
       language = "ENG";
+      selectedLanguage = 2;
+      needsUpdateLang = true;
       Serial1.println(5);
     }
     if(buttons[10]->isPressed()){
@@ -278,6 +283,14 @@ void loop() {
         if (currentMillis - lastUpdate >= updateInterval) {
             drawDifficultyButtons();
             needsUpdate = false;
+            lastUpdate = currentMillis;
+        }
+    }
+    
+    if (needsUpdateLang) {
+        if (currentMillis - lastUpdate >= updateInterval) {
+            drawLanguageButtons();
+            needsUpdateLang = false;
             lastUpdate = currentMillis;
         }
     }
@@ -1306,7 +1319,7 @@ void difficolta(){
   tft.print("HANGMAN");
 
   drawDifficultyButtons();
-  backop.initButton(&tft, 240, 250, 110, 40, WHITE, BLUE, WHITE, "HOME", 4);
+  backop.initButton(&tft, 240, 250, 110, 40, WHITE, BLUE, WHITE, "BACK", 4);
 
   backop.drawButton(false);
 
@@ -1343,7 +1356,6 @@ void drawDifficultyButtons() {
     hard.drawButton(false);
 }
 
-
 void lingua(){
   play.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
@@ -1363,12 +1375,9 @@ void lingua(){
   tft.setTextSize(3.5);
   tft.print("Choose the Language");
 
-  ita.initButton(&tft, 180, 140, 110, 40, WHITE, RED, WHITE, "ITA", 4);
-  eng.initButton(&tft, 310, 140, 110, 40, WHITE, RED, WHITE, "ENG", 4);
-  backop.initButton(&tft, 245, 250, 110, 40, WHITE, BLUE, WHITE, "HOME", 4);
+  drawLanguageButtons();
+  backop.initButton(&tft, 245, 250, 110, 40, WHITE, BLUE, WHITE, "BACK", 4);
 
-  ita.drawButton(false);
-  eng.drawButton(false);
   backop.drawButton(false);
 
   update_button_list(buttons);  //use helper function
@@ -1381,6 +1390,19 @@ void lingua(){
       buttons[i]->drawButton(false);
     }
   }
+}
+
+void drawLanguageButtons() {
+    if (selectedLanguage == 1) {
+      ita.initButton(&tft, 180, 140, 110, 40, WHITE, GREEN, WHITE, "ITA", 4);
+      eng.initButton(&tft, 310, 140, 110, 40, WHITE, RED, WHITE, "ENG", 4);
+    } else if (selectedLanguage == 2) {
+      ita.initButton(&tft, 180, 140, 110, 40, WHITE, RED, WHITE, "ITA", 4);
+      eng.initButton(&tft, 310, 140, 110, 40, WHITE, GREEN, WHITE, "ENG", 4);
+    }
+
+    ita.drawButton(false);
+    eng.drawButton(false);
 }
 
 void impostazioni(){
