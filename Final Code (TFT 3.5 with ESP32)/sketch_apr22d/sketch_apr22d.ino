@@ -51,7 +51,7 @@ const int TS_LEFT = 948, TS_RT = 233, TS_TOP = 139, TS_BOT = 921;
 
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
 MCUFRIEND_kbv tft;
-Adafruit_GFX_Button start, diff, easy, med, hard, backhome, vs, lang, ita, eng, options, backop, play;
+Adafruit_GFX_Button start, diff, easy, med, hard, backhome, vs, lang, ita, eng, options, backop, play, logout;
 
 String menu = "home";
 int mode = 1;
@@ -70,13 +70,13 @@ String d [] = {
   #include "/Users/alerunza/Documents/Arduino/sketch_mar7b/ITA/word3.txt"
 }; */
 
-String a = ""; //parola da indovinare
+String a = "", nickname = ""; //parola da indovinare
 String consiglio = ""; // consiglio da indovinare
-String parolaRicevuta = "", consiglioRicevuto = "";
+String parolaRicevuta = "", consiglioRicevuto = "", parolaBuffer = "", consiglioBuffer = "";
 int nword = 50, randomized = 0;
 String hidden = "", wrong = "", beforeguess = "";
 String prendi;
-int i = 0, tent = 6, generated = 0, z = 0, g = 0, y = 0, scelta = 1, lello = 0, mamma = 0, tenterrato = 0;
+int i = 0, tent = 6, generated = 0, z = 0, g = 0, y = 0, scelta = 1, lello = 0, mamma = 0, tenterrato = 0, punti = 0;;
 bool flag = false, guessed = false, guessmode = false, guessmodewrong = false;
 int selectedDifficulty = 1; // 1 = easy, 2 = medium, 3 = hard
 int selectedLanguage = 1; // 1 = ita, 2 = eng
@@ -103,6 +103,20 @@ bool Touch_getXY(void) {
     pixel_y = map(p.x, TS_TOP, TS_BOT, 0, tft.height());
   }
   return pressed;
+}
+
+bool isValidWord(const String& str) {
+    bool hasChar = false;
+    for (unsigned int i = 0; i < str.length(); i++) {
+        char c = str.charAt(i);
+        if (c != ' ') {
+            hasChar = true;
+            if (islower(c)) {
+                return false;
+            }
+        }
+    }
+    return hasChar;
 }
 
 void setup() {
@@ -169,7 +183,7 @@ void setup() {
 
 // Array of button addresses to behave like a list
 Adafruit_GFX_Button *buttons[] = {
-  &start, &diff, &easy, &med, &hard, &backhome, &vs, &lang, &ita, &eng, &options, &backop, &play, NULL
+  &start, &diff, &easy, &med, &hard, &backhome, &vs, &lang, &ita, &eng, &options, &backop, &play, &logout, NULL
   };
 
 bool update_button(Adafruit_GFX_Button *b, bool down) {
@@ -204,13 +218,21 @@ void loop() {
       buttons[i]->drawButton(false);
     }
     if(buttons[0]->isPressed()){
+      menu = "insNick";
+      if(nickname.length() > 0){
+        startgame();
+      } else{
+        preGame();
+      }
+    }
+    /* if(buttons[0]->isPressed()){
       menu = "start";
       if (!parolaRicevuta.length() == 0 && !consiglioRicevuto.length() == 0){
         startgame();
         parolaRicevuta = "";
         consiglioRicevuto = "";
       }
-    }
+    } */
     if(buttons[1]->isPressed()){
       menu = "diff";
       difficolta();
@@ -219,11 +241,11 @@ void loop() {
       mode = 1;
       selectedDifficulty = 1;
       needsUpdate = true;
-      Serial1.println("1"); 
+      Serial1.println("fac"); 
     }
     if(buttons[3]->isPressed()){
       mode = 2;
-      Serial1.println("2"); 
+      Serial1.println("med"); 
       selectedDifficulty = 2;
       needsUpdate = true;
       Serial.println("Parola Med: " + parolaRicevuta);
@@ -231,7 +253,7 @@ void loop() {
     }
     if(buttons[4]->isPressed()){
       mode = 3;
-      Serial1.println("3"); 
+      Serial1.println("dif"); 
       selectedDifficulty = 3;
       needsUpdate = true;
       Serial.println("Parola Diff: " + parolaRicevuta);
@@ -256,13 +278,13 @@ void loop() {
       language = "ITA";
       selectedLanguage = 1;
       needsUpdateLang = true;
-      Serial1.println(4);
+      Serial1.println("it");
     }
     if(buttons[9]->isPressed()){
       language = "ENG";
       selectedLanguage = 2;
       needsUpdateLang = true;
-      Serial1.println(5);
+      Serial1.println("en");
     }
     if(buttons[10]->isPressed()){
       menu = "options";
@@ -277,6 +299,12 @@ void loop() {
     if(buttons[12]->isPressed()){
       menu = "play";
       giocamenu();
+    }
+    if(buttons[13]->isPressed()){
+      menu = "play";
+      nickname = "";
+      punti = "";
+      home();
     }
 
     if (needsUpdate) {
@@ -295,28 +323,41 @@ void loop() {
         }
     }
 
-
 /*     if (needsUpdate) { 
         drawDifficultyButtons();
         needsUpdate = false;
     } */
 
-    if (Serial1.available() > 0) {
-      String receivedString = Serial1.readStringUntil('\n');
-      receivedString.trim();
-      // Serial.println(receivedString);
-      if (parolaRicevuta.length() == 0) {
-        parolaRicevuta = receivedString;
-      } else if (consiglioRicevuto.length() == 0) {
-        consiglioRicevuto = receivedString;
-        Serial.println("Parola Ricevuta: " + parolaRicevuta);
-        Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
-        nuoveStringheDisponibili = true;
+    Serial1.println(mode);
 
-        /* parolaRicevuta = "";
-        consiglioRicevuto = ""; */
-      }
+    if (Serial1.available() > 0) {
+        String receivedString = Serial1.readStringUntil('\n');
+        receivedString.trim();  // Rimuove spazi bianchi all'inizio e alla fine
+
+        if (receivedString.length() > 0) {  // Verifica se la stringa ricevuta non è vuota
+            if (parolaRicevuta.length() == 0) {
+                parolaRicevuta = receivedString;
+            } 
+            // Assumiamo che consiglioRicevuto possa essere assegnato solo se parolaRicevuta ha già un valore.
+            else if (consiglioRicevuto.length() == 0) { 
+                consiglioRicevuto = receivedString;
+                Serial.println("Parola Ricevuta: " + parolaRicevuta);
+                Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+                
+                // Assegna i valori alle variabili "buffer" prima di resettare
+                parolaBuffer = parolaRicevuta;
+                consiglioBuffer = consiglioRicevuto;
+
+                nuoveStringheDisponibili = true;
+                
+                // Resetta le variabili per la prossima serie di dati
+                parolaRicevuta = "";
+                consiglioRicevuto = "";
+            }
+        }
     }
+
+
 
   /* Serial.println(menu + " mode: " + mode);
   Serial.println(a + " | " + generated + " - scelta: " + mode); */
@@ -326,9 +367,9 @@ void loop() {
 void home(){
   Serial1.println(mode);
   if(language == "ITA"){
-    Serial1.println(4);
+    Serial1.println("it");
   } else if(language == "ENG"){
-    Serial1.println(5);
+    Serial1.println("en");
   }
 
   start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
@@ -338,6 +379,17 @@ void home(){
   backhome.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
 
   tft.fillScreen(BLACK);
+
+  if(nickname.length() > 0){
+    tft.setCursor(10, 290);
+    tft.setTextColor(WHITE);
+    tft.setTextSize(2);
+    tft.print(nickname + ":" + String(punti));
+    logout.initButton(&tft, 410, 285, 80, 40, WHITE, RED, WHITE, "LOGOUT", 2);
+    logout.drawButton(false);
+  } else{
+    logout.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4); 
+  }
 
   tft.setCursor(145, 10);
   tft.setTextColor(RED);
@@ -354,25 +406,37 @@ void home(){
   play.drawButton(false);
   options.drawButton(false);
 
-  parolaRicevuta = "";
-  consiglioRicevuto = "";
+/*   parolaRicevuta = "";
+  consiglioRicevuto = ""; */
 
   if (Serial1.available() > 0) {
-    String receivedString = Serial1.readStringUntil('\n');
-    receivedString.trim();
-    // Serial.println(receivedString);
-    if (parolaRicevuta.length() == 0) {
-      parolaRicevuta = receivedString;
-    } else if (consiglioRicevuto.length() == 0) {
-      consiglioRicevuto = receivedString;
-      Serial.println("Parola Ricevuta: " + parolaRicevuta);
-      Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
-      nuoveStringheDisponibili = true;
+      String receivedString = Serial1.readStringUntil('\n');
+      receivedString.trim();  // Rimuove spazi bianchi all'inizio e alla fine
 
-      /* parolaRicevuta = "";
-      consiglioRicevuto = ""; */
-    }
+      if (receivedString.length() > 0) {  // Verifica se la stringa ricevuta non è vuota
+          if (parolaRicevuta.length() == 0) {
+              parolaRicevuta = receivedString;
+          } 
+          // Assumiamo che consiglioRicevuto possa essere assegnato solo se parolaRicevuta ha già un valore.
+          else if (consiglioRicevuto.length() == 0) { 
+              consiglioRicevuto = receivedString;
+              Serial.println("Parola Ricevuta: " + parolaRicevuta);
+              Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+              
+              // Assegna i valori alle variabili "buffer" prima di resettare
+              parolaBuffer = parolaRicevuta;
+              consiglioBuffer = consiglioRicevuto;
+
+              nuoveStringheDisponibili = true;
+              
+              // Resetta le variabili per la prossima serie di dati
+              parolaRicevuta = "";
+              consiglioRicevuto = "";
+          }
+      }
   }
+
+
 
   update_button_list(buttons);  //use helper function
   for (int i = 0; buttons[i] != NULL; i++) {
@@ -386,16 +450,95 @@ void home(){
   }
 }
 
-void startgame(){
-  Serial1.println(mode);
-  if(language == "ITA"){
-    Serial1.println(4);
-  } else if(language == "ENG"){
-    Serial1.println(5);
+void preGame(){
+  z = 0;
+  mamma = 0;
+  nickname = "";
+  punti = 0;
+  tft.fillScreen(BLACK);
+
+  tft.setCursor(145, 10);
+  tft.setTextColor(RED);
+  tft.setTextSize(5);
+  tft.print("HANGMAN");
+
+  tft.setCursor(16, 50);
+  tft.setTextColor(WHITE);
+  tft.setTextSize(4);
+  tft.print("Your Nickname");
+
+  tft.setCursor(16, 120);
+  tft.setTextColor(WHITE, BLACK);
+  tft.setTextSize(6);
+  tft.print(nickname);
+
+  start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  vs.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  backhome.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  logout.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+
+  while(mamma == 0){
+    input = firstKpd.getKey();
+    input2 = secondKpd.getKey();
+
+    if (input) {
+      if(input == '='){
+        if (nickname.length() > 0) {
+          nickname = nickname.substring(0, nickname.length() - 1);
+          tft.fillRect(20, 100, tft.width() - 40, 50, BLACK);
+        }
+      } else if (input == '('){} else{
+        nickname += input;
+      }
+      g++;
+      tft.setCursor(20, 100);
+      tft.setTextColor(WHITE, BLACK);
+      tft.setTextSize(6);
+      tft.print(nickname);
+    }
+
+    if (input2) {
+      if(input2 == '^'){
+        mamma = 1;
+      } else if(input2 == '|' || input2 == '?' || input2 == '('){}else {
+        nickname += input2;
+      }
+      g++;
+      tft.setCursor(20, 100);
+      tft.setTextColor(WHITE, BLACK);
+      tft.setTextSize(6);
+      tft.print(nickname);
+    }
   }
-  Serial.println(a + " " + consiglio);
-  Serial.println("Parola Ricevuta: " + parolaRicevuta);
-  Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+  /* while(z == 0){
+    tft.fillScreen(BLACK);
+    tft.setCursor(20, 100);
+    tft.setTextColor(WHITE, BLACK);
+    tft.setTextSize(6);
+    tft.print(nickname);
+    delay(2500);
+    z = 1;
+  } */
+  // Serial1.println(nickname);
+  if (parolaRicevuta.length() > 2 && parolaRicevuta != nickname && isValidWord(parolaRicevuta)) {
+    startgame();
+  } else {
+      home();
+      Serial1.println(mode);
+  }
+}
+
+void startgame(){
+/*   Serial1.println(mode);
+  if(language == "ITA"){
+    Serial1.println("it");
+  } else if(language == "ENG"){
+    Serial1.println("en");
+  } */
+  Serial1.println(nickname);
+  // Serial.println(a + " " + consiglio);
+  Serial.println("Parola Buffer: " + parolaBuffer);
+  Serial.println("Consiglio Buffer: " + consiglioBuffer);
   while (z == 0) {
     Serial.println("RESET");
     tent = 6;
@@ -408,9 +551,10 @@ void startgame(){
     switch(mode){
       case 1:
         // a = "BICICLETTA";
+        
         if (nuoveStringheDisponibili) {
-          a = parolaRicevuta; 
-          consiglio = consiglioRicevuto; 
+          a = parolaBuffer; 
+          consiglio = consiglioBuffer; 
           nuoveStringheDisponibili = false;
         }
         // a = b[generated];
@@ -419,8 +563,8 @@ void startgame(){
         break;
       case 2:
         if (nuoveStringheDisponibili) {
-          a = parolaRicevuta; 
-          consiglio = consiglioRicevuto; 
+          a = parolaBuffer; 
+          consiglio = consiglioBuffer; 
           nuoveStringheDisponibili = false;
         }
         // a = c[generated];
@@ -429,8 +573,8 @@ void startgame(){
         break;
       case 3:
         if (nuoveStringheDisponibili) {
-          a = parolaRicevuta; 
-          consiglio = consiglioRicevuto; 
+          a = parolaBuffer; 
+          consiglio = consiglioBuffer; 
           nuoveStringheDisponibili = false;
         }
         // a = d[generated];
@@ -464,6 +608,10 @@ void startgame(){
   tft.setTextColor(WHITE);
   tft.setTextSize(3);
   tft.print(ndiff + " Mode");
+  tft.setCursor(20, 45);
+  tft.setTextColor(WHITE, BLACK);
+  tft.setTextSize(3);
+  tft.print(nickname + ":" + String(punti));
   //Serial.println(randomized);
 
   tft.setCursor(20, 100);
@@ -474,10 +622,12 @@ void startgame(){
   start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   vs.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
+  logout.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
 
   while(lello){
     input = firstKpd.getKey();
     input2 = secondKpd.getKey();
+
 
     if (input) {
       if(input == '('){}
@@ -493,24 +643,34 @@ void startgame(){
 
       for (int s = 0; s < a.length(); s++) {
         if (input == a[s]) {
-          hidden[s] = input;
-          // delay(500);
-          g++;
-          tft.setCursor(20, 100);
-          tft.setTextColor(WHITE, BLACK);
-          tft.setTextSize(6);
-          tft.print(hidden);
-          tft.setCursor(450, 10);
-          tft.setTextSize(4);
-          tft.print(tent);
-          Serial.println("Lettere indovinate: " + String(g));
-          is_present = true;
+          if(input == hidden[s]){
+            is_present = true;
+          }else{
+            hidden[s] = input;
+            // delay(500);
+            punti += 1;
+            tft.setCursor(20, 45);
+            tft.setTextColor(WHITE, BLACK);
+            tft.setTextSize(3);
+            tft.print(nickname + ":" + String(punti));
+            g++;
+            tft.setCursor(20, 100);
+            tft.setTextColor(WHITE, BLACK);
+            tft.setTextSize(6);
+            tft.print(hidden);
+            tft.setCursor(450, 10);
+            tft.setTextSize(4);
+            tft.print(tent);
+            Serial.println("Lettere indovinate: " + String(g));
+            is_present = true;
+          }
         } else if (a.charAt(s) != input){
           if(input == '=' || input == '('){} else{
             h++;
           }
           }
       }
+
       if (!is_present) {
         for (int i = 0; i < wrong.length(); i++) {
           if (input == wrong[i]) {
@@ -601,6 +761,7 @@ void startgame(){
           tft.print(a);
           tft.setTextColor(GREEN);
           tft.print(" - WON");
+          punti += 3;
           delay(750);
           z = 0;
           lello = 0;
@@ -643,24 +804,34 @@ void startgame(){
 
       for (int s = 0; s < a.length(); s++) {
         if (input2 == a[s]) {
-          hidden[s] = input2;
-          // delay(500);
-          g++;
-          tft.setCursor(20, 100);
-          tft.setTextColor(WHITE, BLACK);
-          tft.setTextSize(6);
-          tft.print(hidden);
-          tft.setCursor(450, 10);
-          tft.setTextSize(4);
-          tft.print(tent);
-          Serial.println("Lettere indovinate: " + String(g));
-          is_present = true;
+          if(input2 == hidden[s]){
+            is_present = true;
+          }else{
+            hidden[s] = input2;
+            // delay(500);
+            punti += 1;
+            tft.setCursor(20, 45);
+            tft.setTextColor(WHITE, BLACK);
+            tft.setTextSize(3);
+            tft.print(nickname + ":" + String(punti));
+            g++;
+            tft.setCursor(20, 100);
+            tft.setTextColor(WHITE, BLACK);
+            tft.setTextSize(6);
+            tft.print(hidden);
+            tft.setCursor(450, 10);
+            tft.setTextSize(4);
+            tft.print(tent);
+            Serial.println("Lettere indovinate: " + String(g));
+            is_present = true;
+          }
         } else if (a.charAt(s) != input2){
             if(input2 == '(' || input2 == '^'){} else{
               h++;
             }
           }
       }
+
       if (!is_present) {
         for (int i = 0; i < wrong.length(); i++) {
           if (input2 == wrong[i]) {
@@ -755,6 +926,7 @@ void startgame(){
           tft.print(a);
           tft.setTextColor(GREEN);
           tft.print(" - WON");
+          punti += 3;
           delay(750);
           z = 0;
           lello = 0;
@@ -773,6 +945,7 @@ void startgame(){
     }
   }
 
+  Serial.println("Punti di: " + nickname + " - " + punti);
   start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   vs.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
@@ -1212,6 +1385,7 @@ void guess(){
           tft.print(a);
           tft.setTextColor(GREEN);
           tft.print(" - WON");
+          punti += 10;
           hidden = a;
           delay(750);
           z = 0;
@@ -1279,6 +1453,7 @@ void guess(){
           tft.print(a);
           tft.setTextColor(GREEN);
           tft.print(" - WON");
+          punti += 10;
           hidden = a;
           delay(750);
           z = 0;
@@ -1295,7 +1470,7 @@ void guess(){
       }
     }
   }
-
+  Serial.println("Guess Punti di: " + nickname + " - " + punti);
   start.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   diff.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
   vs.initButton(&tft, 0, 0, 0, 0, BLACK, BLACK, BLACK, "", 4);
@@ -1445,25 +1620,39 @@ void impostazioni(){
   lang.drawButton(false);
   backhome.drawButton(false);
 
-  parolaRicevuta = "";
-  consiglioRicevuto = "";
+  /* parolaRicevuta = "";
+  consiglioRicevuto = ""; */
 
-  if (Serial1.available() > 0) {
+
+
+if (Serial1.available() > 0) {
     String receivedString = Serial1.readStringUntil('\n');
-    receivedString.trim();
-    // Serial.println(receivedString);
-    if (parolaRicevuta.length() == 0) {
-      parolaRicevuta = receivedString;
-    } else if (consiglioRicevuto.length() == 0) {
-      consiglioRicevuto = receivedString;
-      Serial.println("Parola Ricevuta: " + parolaRicevuta);
-      Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
-      nuoveStringheDisponibili = true;
+    receivedString.trim();  // Rimuove spazi bianchi all'inizio e alla fine
 
-      /* parolaRicevuta = "";
-      consiglioRicevuto = ""; */
+    if (receivedString.length() > 0) {  // Verifica se la stringa ricevuta non è vuota
+        if (parolaRicevuta.length() == 0) {
+            parolaRicevuta = receivedString;
+        } 
+        // Assumiamo che consiglioRicevuto possa essere assegnato solo se parolaRicevuta ha già un valore.
+        else if (consiglioRicevuto.length() == 0) { 
+            consiglioRicevuto = receivedString;
+            Serial.println("Parola Ricevuta: " + parolaRicevuta);
+            Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+            
+            // Assegna i valori alle variabili "buffer" prima di resettare
+            parolaBuffer = parolaRicevuta;
+            consiglioBuffer = consiglioRicevuto;
+
+            nuoveStringheDisponibili = true;
+            
+            // Resetta le variabili per la prossima serie di dati
+            parolaRicevuta = "";
+            consiglioRicevuto = "";
+        }
     }
-  }
+}
+
+
 
   update_button_list(buttons);  //use helper function
   for (int i = 0; buttons[i] != NULL; i++) {
@@ -1491,7 +1680,7 @@ void giocamenu(){
   tft.setTextSize(3);
   tft.print("THE GAME");
 
-  start.initButton(&tft, 245, 130, 175, 40, WHITE, RED, WHITE, "CPU", 4);
+  start.initButton(&tft, 245, 130, 175, 40, WHITE, RED, WHITE, "SOLO", 4);
   vs.initButton(&tft, 245, 180, 175, 40, WHITE, RED, WHITE, "1vs1", 4);
   backhome.initButton(&tft, 245, 230, 175, 40, WHITE, BLUE, WHITE, "HOME", 4);
 
@@ -1499,25 +1688,37 @@ void giocamenu(){
   vs.drawButton(false);
   backhome.drawButton(false);
 
-  parolaRicevuta = "";
-  consiglioRicevuto = "";
+  /* parolaRicevuta = "";
+  consiglioRicevuto = ""; */
 
   if (Serial1.available() > 0) {
-    String receivedString = Serial1.readStringUntil('\n');
-    receivedString.trim();
-    // Serial.println(receivedString);
-    if (parolaRicevuta.length() == 0) {
-      parolaRicevuta = receivedString;
-    } else if (consiglioRicevuto.length() == 0) {
-      consiglioRicevuto = receivedString;
-      Serial.println("Parola Ricevuta: " + parolaRicevuta);
-      Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
-      nuoveStringheDisponibili = true;
+      String receivedString = Serial1.readStringUntil('\n');
+      receivedString.trim();  // Rimuove spazi bianchi all'inizio e alla fine
 
-      /* parolaRicevuta = "";
-      consiglioRicevuto = ""; */
-    }
+      if (receivedString.length() > 0) {  // Verifica se la stringa ricevuta non è vuota
+          if (parolaRicevuta.length() == 0) {
+              parolaRicevuta = receivedString;
+          } 
+          // Assumiamo che consiglioRicevuto possa essere assegnato solo se parolaRicevuta ha già un valore.
+          else if (consiglioRicevuto.length() == 0) { 
+              consiglioRicevuto = receivedString;
+              Serial.println("Parola Ricevuta: " + parolaRicevuta);
+              Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+              
+              // Assegna i valori alle variabili "buffer" prima di resettare
+              parolaBuffer = parolaRicevuta;
+              consiglioBuffer = consiglioRicevuto;
+
+              nuoveStringheDisponibili = true;
+              
+              // Resetta le variabili per la prossima serie di dati
+              parolaRicevuta = "";
+              consiglioRicevuto = "";
+          }
+      }
   }
+
+
 
   update_button_list(buttons);  //use helper function
   for (int i = 0; buttons[i] != NULL; i++) {

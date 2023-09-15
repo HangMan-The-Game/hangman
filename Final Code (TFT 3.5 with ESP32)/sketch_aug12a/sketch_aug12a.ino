@@ -7,8 +7,11 @@
 #define WIFI_SSID "OPPO A53s"
 #define WIFI_PASSWORD "michele06"
 
-/* #define WIFI_SSID "iPhone di Ale"
-#define WIFI_PASSWORD "alerunza" */
+//#define WIFI_SSID "iPhone di Ale"
+//#define WIFI_PASSWORD "alerunza" 
+
+//#define WIFI_SSID "Ed"
+//#define WIFI_PASSWORD "cavl1431" 
 
 #define API_KEY "f2YtnVuyxOV7omZ0zXoaGwcDHgt5Miy12OhW8v8p"
 #define DATABASE_URL "https://hangmangame-it-default-rtdb.europe-west1.firebasedatabase.app/"
@@ -20,9 +23,9 @@ int x;
 int numeroDiParoleFacili = 176, numeroDiParoleMedie = 228, numeroDiParoleDifficili = 71;  
 
 String lang = "ITA";
-
+String receivedStr = "";
 int receivedValue = 1, after = 1;
-String mode = "Facile";
+String mode = "Facile", nick = "";
 bool xGenerated = false;
 
 void setup() {
@@ -51,10 +54,57 @@ void setup() {
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    receivedValue = Serial.parseInt();
-    after = receivedValue;
+if (Serial.available() > 0) {
+  receivedStr = Serial.readStringUntil('\n');
+  receivedStr.trim();
+  bool isNumber = true;
+
+  for (int i = 0; i < receivedStr.length(); i++) {
+    if (!isdigit(receivedStr[i])) {  // Utilizza isdigit() invece di isDigit()
+      isNumber = false;
+      break;
+    }
   }
+
+  if (isNumber) {
+    receivedValue = receivedStr.toInt();
+    after = receivedValue;
+  } else {
+    switch (receivedStr[0]) {
+      case 'f':
+        if (receivedStr == "fac") {
+          handleReceivedValue();
+        } else {
+          nick = receivedStr;
+        }
+        break;
+      case 'm':
+        if (receivedStr == "med") {
+          handleReceivedValue();
+        } else {
+          nick = receivedStr;
+        }
+        break;
+      case 'd':
+        if (receivedStr == "dif") {
+          handleReceivedValue();
+        } else {
+          nick = receivedStr;
+        }
+        break;
+      case 'i':
+        if (receivedStr == "it" || receivedStr == "en") {
+          handleReceivedValue();
+        } else {
+          nick = receivedStr;
+        }
+        break;
+      default:
+        nick = receivedStr;
+    }
+  }
+}
+
 
   if (after != 0) {
     handleReceivedValue();
@@ -65,30 +115,26 @@ void loop() {
   }
 }
 
+
 void handleReceivedValue() {
-  switch (after) {
-    case 1:
-      mode = "Facile";
-      generateWord();
-      break;
-    case 2:
-      mode = "Medio";
-      generateWord();
-      break;
-    case 3:
-      mode = "Difficile";
-      generateWord();
-      break;
-    case 4:
-      lang = "ITA";
-      generateWord();
-      break;
-    case 5:
-      lang = "ENG";
-      generateWord();
-      break;
+  if (receivedStr == "fac") {
+    mode = "Facile";
+    generateWord();
+  } else if (receivedStr == "med") {
+    mode = "Medio";
+    generateWord();
+  } else if (receivedStr == "dif") {
+    mode = "Difficile";
+    generateWord();
+  } else if (receivedStr == "it") {
+    lang = "ITA";
+    generateWord();
+  } else if (receivedStr == "en") {
+    lang = "ENG";
+    generateWord();
   }
 }
+
 
 void generateWord() {
   if (mode == "Facile") {
@@ -102,6 +148,10 @@ void generateWord() {
 }
 
 void fetchDataAndSend() {
+  if (!nick.isEmpty() && after > 1) {
+    String pathNick = "Classifica/" + nick + "/" + String(after);
+    Firebase.setString(fbdo, pathNick, nick);
+  }
   String path = lang + "/" + mode +"/Parole/" + String(x);
   String pathConsigli = lang + "/" + mode + "/Consigli/" + String(x);
   String parola = Firebase.getString(fbdo, path) ? fbdo.to<const char *>() : "";
@@ -110,5 +160,5 @@ void fetchDataAndSend() {
   String parolaEconsiglio = parola + "\n" + consiglio + "\n";
   Serial.print(parolaEconsiglio);
   xGenerated = false;
-  delay(500);
+  // delay(500);
 }
