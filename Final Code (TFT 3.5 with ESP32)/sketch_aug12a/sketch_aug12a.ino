@@ -53,6 +53,15 @@ void setup() {
   randomSeed(analogRead(0));
 }
 
+bool isAllUppercase(String s) {
+    for(int i = 0; i < s.length(); i++) {
+        if(islower(s[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
 void loop() {
 if (Serial.available() > 0) {
   receivedStr = Serial.readStringUntil('\n');
@@ -148,17 +157,20 @@ void generateWord() {
 }
 
 void fetchDataAndSend() {
+  String parola = "", consiglio = "", parolaEconsiglio = "";
   if (!nick.isEmpty() && after > 1) {
     String pathNick = "Classifica/" + nick + "/" + String(after);
     Firebase.setString(fbdo, pathNick, nick);
   }
   String path = lang + "/" + mode +"/Parole/" + String(x);
   String pathConsigli = lang + "/" + mode + "/Consigli/" + String(x);
-  String parola = Firebase.getString(fbdo, path) ? fbdo.to<const char *>() : "";
-  String consiglio = Firebase.getString(fbdo, pathConsigli) ? fbdo.to<const char *>() : "";
+  parola = Firebase.getString(fbdo, path) ? fbdo.to<const char *>() : "";
+  consiglio = Firebase.getString(fbdo, pathConsigli) ? fbdo.to<const char *>() : "";
 
-  String parolaEconsiglio = parola + "\n" + consiglio + "\n";
-  Serial.print(parolaEconsiglio);
+  if(isAllUppercase(parola)) {
+    parolaEconsiglio = parola + "\n" + consiglio + "\n";
+    Serial.print(parolaEconsiglio);
+  }
   xGenerated = false;
-  // delay(500);
+  delay(1000);
 }

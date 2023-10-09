@@ -119,6 +119,15 @@ bool isValidWord(const String& str) {
     return hasChar;
 }
 
+bool isAllUppercase(String s) {
+    for(int i = 0; i < s.length(); i++) {
+        if(islower(s[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
 void setup() {
 
   pinMode(39, OUTPUT);
@@ -329,28 +338,27 @@ void loop() {
     } */
 
     Serial1.println(mode);
-
     if (Serial1.available() > 0) {
         String receivedString = Serial1.readStringUntil('\n');
-        receivedString.trim();  // Rimuove spazi bianchi all'inizio e alla fine
+        receivedString.trim();
 
-        if (receivedString.length() > 0) {  // Verifica se la stringa ricevuta non è vuota
-            if (parolaRicevuta.length() == 0) {
+        if (receivedString.length() > 0) {
+            if(parolaRicevuta.length() == 0 && isAllUppercase(receivedString)) {
                 parolaRicevuta = receivedString;
             } 
-            // Assumiamo che consiglioRicevuto possa essere assegnato solo se parolaRicevuta ha già un valore.
-            else if (consiglioRicevuto.length() == 0) { 
+            else if (parolaRicevuta.length() > 0 && consiglioRicevuto.length() == 0) {
                 consiglioRicevuto = receivedString;
+            }
+
+            if (parolaRicevuta.length() > 0 && consiglioRicevuto.length() > 0) {
                 Serial.println("Parola Ricevuta: " + parolaRicevuta);
                 Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
-                
-                // Assegna i valori alle variabili "buffer" prima di resettare
+                    
                 parolaBuffer = parolaRicevuta;
                 consiglioBuffer = consiglioRicevuto;
 
                 nuoveStringheDisponibili = true;
-                
-                // Resetta le variabili per la prossima serie di dati
+                    
                 parolaRicevuta = "";
                 consiglioRicevuto = "";
             }
@@ -409,32 +417,32 @@ void home(){
 /*   parolaRicevuta = "";
   consiglioRicevuto = ""; */
 
-  if (Serial1.available() > 0) {
-      String receivedString = Serial1.readStringUntil('\n');
-      receivedString.trim();  // Rimuove spazi bianchi all'inizio e alla fine
+    if (Serial1.available() > 0) {
+        String receivedString = Serial1.readStringUntil('\n');
+        receivedString.trim();
 
-      if (receivedString.length() > 0) {  // Verifica se la stringa ricevuta non è vuota
-          if (parolaRicevuta.length() == 0) {
-              parolaRicevuta = receivedString;
-          } 
-          // Assumiamo che consiglioRicevuto possa essere assegnato solo se parolaRicevuta ha già un valore.
-          else if (consiglioRicevuto.length() == 0) { 
-              consiglioRicevuto = receivedString;
-              Serial.println("Parola Ricevuta: " + parolaRicevuta);
-              Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
-              
-              // Assegna i valori alle variabili "buffer" prima di resettare
-              parolaBuffer = parolaRicevuta;
-              consiglioBuffer = consiglioRicevuto;
+        if (receivedString.length() > 0) {
+            if(parolaRicevuta.length() == 0 && isAllUppercase(receivedString)) {
+                parolaRicevuta = receivedString;
+            } 
+            else if (parolaRicevuta.length() > 0 && consiglioRicevuto.length() == 0) {
+                consiglioRicevuto = receivedString;
+            }
 
-              nuoveStringheDisponibili = true;
-              
-              // Resetta le variabili per la prossima serie di dati
-              parolaRicevuta = "";
-              consiglioRicevuto = "";
-          }
-      }
-  }
+            if (parolaRicevuta.length() > 0 && consiglioRicevuto.length() > 0) {
+                Serial.println("Parola Ricevuta: " + parolaRicevuta);
+                Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+                    
+                parolaBuffer = parolaRicevuta;
+                consiglioBuffer = consiglioRicevuto;
+
+                nuoveStringheDisponibili = true;
+                    
+                parolaRicevuta = "";
+                consiglioRicevuto = "";
+            }
+        }
+    }
 
 
 
@@ -627,7 +635,6 @@ void startgame(){
   while(lello){
     input = firstKpd.getKey();
     input2 = secondKpd.getKey();
-
 
     if (input) {
       if(input == '('){}
@@ -1625,32 +1632,32 @@ void impostazioni(){
 
 
 
-if (Serial1.available() > 0) {
-    String receivedString = Serial1.readStringUntil('\n');
-    receivedString.trim();  // Rimuove spazi bianchi all'inizio e alla fine
+    if (Serial1.available() > 0) {
+        String receivedString = Serial1.readStringUntil('\n');
+        receivedString.trim();
 
-    if (receivedString.length() > 0) {  // Verifica se la stringa ricevuta non è vuota
-        if (parolaRicevuta.length() == 0) {
-            parolaRicevuta = receivedString;
-        } 
-        // Assumiamo che consiglioRicevuto possa essere assegnato solo se parolaRicevuta ha già un valore.
-        else if (consiglioRicevuto.length() == 0) { 
-            consiglioRicevuto = receivedString;
-            Serial.println("Parola Ricevuta: " + parolaRicevuta);
-            Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
-            
-            // Assegna i valori alle variabili "buffer" prima di resettare
-            parolaBuffer = parolaRicevuta;
-            consiglioBuffer = consiglioRicevuto;
+        if (receivedString.length() > 0) {
+            if(parolaRicevuta.length() == 0 && isAllUppercase(receivedString)) {
+                parolaRicevuta = receivedString;
+            } 
+            else if (parolaRicevuta.length() > 0 && consiglioRicevuto.length() == 0) {
+                consiglioRicevuto = receivedString;
+            }
 
-            nuoveStringheDisponibili = true;
-            
-            // Resetta le variabili per la prossima serie di dati
-            parolaRicevuta = "";
-            consiglioRicevuto = "";
+            if (parolaRicevuta.length() > 0 && consiglioRicevuto.length() > 0) {
+                Serial.println("Parola Ricevuta: " + parolaRicevuta);
+                Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+                    
+                parolaBuffer = parolaRicevuta;
+                consiglioBuffer = consiglioRicevuto;
+
+                nuoveStringheDisponibili = true;
+                    
+                parolaRicevuta = "";
+                consiglioRicevuto = "";
+            }
         }
     }
-}
 
 
 
@@ -1691,32 +1698,32 @@ void giocamenu(){
   /* parolaRicevuta = "";
   consiglioRicevuto = ""; */
 
-  if (Serial1.available() > 0) {
-      String receivedString = Serial1.readStringUntil('\n');
-      receivedString.trim();  // Rimuove spazi bianchi all'inizio e alla fine
+    if (Serial1.available() > 0) {
+        String receivedString = Serial1.readStringUntil('\n');
+        receivedString.trim();
 
-      if (receivedString.length() > 0) {  // Verifica se la stringa ricevuta non è vuota
-          if (parolaRicevuta.length() == 0) {
-              parolaRicevuta = receivedString;
-          } 
-          // Assumiamo che consiglioRicevuto possa essere assegnato solo se parolaRicevuta ha già un valore.
-          else if (consiglioRicevuto.length() == 0) { 
-              consiglioRicevuto = receivedString;
-              Serial.println("Parola Ricevuta: " + parolaRicevuta);
-              Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
-              
-              // Assegna i valori alle variabili "buffer" prima di resettare
-              parolaBuffer = parolaRicevuta;
-              consiglioBuffer = consiglioRicevuto;
+        if (receivedString.length() > 0) {
+            if(parolaRicevuta.length() == 0 && isAllUppercase(receivedString)) {
+                parolaRicevuta = receivedString;
+            } 
+            else if (parolaRicevuta.length() > 0 && consiglioRicevuto.length() == 0) {
+                consiglioRicevuto = receivedString;
+            }
 
-              nuoveStringheDisponibili = true;
-              
-              // Resetta le variabili per la prossima serie di dati
-              parolaRicevuta = "";
-              consiglioRicevuto = "";
-          }
-      }
-  }
+            if (parolaRicevuta.length() > 0 && consiglioRicevuto.length() > 0) {
+                Serial.println("Parola Ricevuta: " + parolaRicevuta);
+                Serial.println("Consiglio Ricevuto: " + consiglioRicevuto);
+                    
+                parolaBuffer = parolaRicevuta;
+                consiglioBuffer = consiglioRicevuto;
+
+                nuoveStringheDisponibili = true;
+                    
+                parolaRicevuta = "";
+                consiglioRicevuto = "";
+            }
+        }
+    }
 
 
 
