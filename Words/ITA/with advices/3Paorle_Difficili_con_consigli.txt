@@ -2,7 +2,7 @@ parole = [
     "ABBUFFATA", "ANGUILLOSO", "CICALECCIO", "COCCIUTAGGINE", "DISCORDANTE",
     "ELETTROLISI", "EQUANIMITA'", "ERMELLINO", "FILOLOGIA", "FRANGENTE",
     "GHIRLANDA", "GIUNCATA", "IMBRACATURA", "IMPRONTE", "INCANDESCENZA",
-    "INFRANGIBILE", "LAMPADOFORA", "LATRATO", "MANGANELLO", "MORFEMICO",
+    "INFRANGIBILE", "LAMPADOFORO", "LATRATO", "MANGANELLO", "MORFEMICO",
     "NEVRALGIA", "OLOCAUSTO", "PARMENIDE", "PENTAFONO",
     "PIPISTRELLO", "RECONDITO", "RIGOGOLO", "SCARTABELLO", "SMAGLIATURA",
     "SOTTERRANEO", "SPIRAGLIO", "STRALLARE", "STRIDULO", "SUBLIME", "ACULEO",
@@ -17,7 +17,7 @@ parole = [
 definizioni = [
     "Mangiare eccessivamente", "Simile all'anguilla", "Chiacchiericcio", "Atteggiamento da testardo", "Non armonioso",
     "Decomposizione elettrica", "Calma", "Animale con pelo prezioso", "Studio di testi", "Momento preciso",
-    "Decorazione natalizia", "Materiale intrecciato", "Attrezzatura anti-infortunio", "Segni di scarpe sulla neve", "Luce calda",
+    "Decorazione natalizia", "Formaggio intrecciato", "Attrezzatura anti-infortunio", "Segni di scarpe sulla neve", "Luce calda",
     "Indistruttibile", "Portacandela antico", "Abbaio", "Oggetto per colpire utilizzato dalla polizia", "Blocchi linguistici",
     "Dolore nervoso", "27 Gennaio", "Filosofo greco", "Strumento a fiato",
     "Mammifero notturno", "Nascosto", "Uccello canterino", "Tavolo smistatore", "Difetto di verniciatura",
