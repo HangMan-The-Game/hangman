@@ -22,7 +22,7 @@ parole = [
 ]
 
 definizioni = [
-    "Bevanda quotidiana", "Mezzo di trasporto", "Contenitore di cancelleria", "Per rimuovere polvere", "Animale che produce miele", 
+    "Bevanda quotidiana", "Mezzo di trasporto", "Contiene penne e matite", "Elettrodomestico per la polvere", "Produce il miele", 
     "Veicolo a due ruote", "Contenitore per liquidi", "Strumento musicale", "Per l'autobus", "Custodia contenente denaro e documenti",
     "Calcolatore elettronico", "Per ascoltare musica", "Animale domestico", "Capo elegante", "Per aprire le serrature", 
     "Di cera, profumata", "Segreto o scolastico", "A fine pasto", "Sbaglio", "Conserva il cibo",
