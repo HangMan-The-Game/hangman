@@ -56,6 +56,13 @@ Adafruit_GFX_Button start, diff, easy, med, hard, backhome, vs, lang, ita, eng, 
 String menu = "home";
 int mode = 1;
 
+int nLed = 6;
+// int pinLed[] = {48, 49, 50, 51, 52, 53};
+int pinLed[] = {44, 46, 40, 48, 42, 50};
+
+/* int pinMarrone = 53, pinBianco = 52, pinGrigio = 51, pinViola = 50;
+int pinBlu = 49, pinVerde = 48; */
+
 String language = "ITA";
 
 String ndiff = "Easy";
@@ -137,6 +144,14 @@ void setup() {
   digitalWrite(39, HIGH);
   digitalWrite(41, HIGH);
   digitalWrite(43, HIGH);
+
+  for(int j = 0; j < nLed; j++){
+    pinMode(pinLed[j], OUTPUT);
+  }
+
+  for(int j = 0; j < nLed; j++){
+    digitalWrite(pinLed[j], LOW);
+  }
 
   pinMode(speakerPin, OUTPUT);
   randomSeed(analogRead(0));
@@ -550,6 +565,10 @@ void startgame(){
   while (z == 0) {
     Serial.println("RESET");
     tent = 6;
+    for(int j = 0; j < nLed; j++){
+      digitalWrite(pinLed[j], LOW);
+    }
+
     tenterrato = 0;
     hidden = "";
     wrong = "";
@@ -603,6 +622,9 @@ void startgame(){
 
   if(tenterrato == 1){
     tent = 1;
+    for(int j = 0; j < nLed-1; j++){
+      digitalWrite(pinLed[j], HIGH);
+    }
     tenterrato = 0;
   }
 
@@ -695,6 +717,7 @@ void startgame(){
               // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
+                digitalWrite(pinLed[tent], HIGH);
 
                 if(((mode == 2) || (mode == 3)) && (tent == 3)){
                   tft.setCursor(20, 230);
@@ -858,6 +881,7 @@ void startgame(){
               // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
+                digitalWrite(pinLed[tent], HIGH);
                 
                 if(((mode == 2) || (mode == 3)) && (tent == 3)){
                   tft.setCursor(20, 230);
@@ -1033,6 +1057,9 @@ void versus(){
   while (z == 0) {
     Serial.println("RESET");
     tent = 6;
+    for(int j = 0; j < nLed; j++){
+      digitalWrite(pinLed[j], LOW);
+    }
     // Serial1.println("9");
     hidden = "";
     wrong = "";
@@ -1116,6 +1143,7 @@ void versus(){
               // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
+                digitalWrite(pinLed[tent], HIGH);
                 // Serial1.println(tent);
                 tone(speakerPin, 500);
                 // delay(1000);
@@ -1229,6 +1257,7 @@ void versus(){
               // Serial1.println(tent);
               if (h == a.length()) {
                 tent--;
+                digitalWrite(pinLed[tent], HIGH);
                 // Serial1.println(tent);
                 tone(speakerPin, 500);
                 // delay(1000);
